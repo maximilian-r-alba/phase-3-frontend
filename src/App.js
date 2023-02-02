@@ -21,10 +21,10 @@ function App() {
   
     <NavBar></NavBar>
     <Routes>
+      
     <Route path="/" element = {user? <h1>WELCOME {user.name}</h1> : <h1>WELCOME</h1>}/>
     <Route path="/books" element = {<BrowseBooksPage/>}/>
     <Route path="/profile" element = {<ProfilePage user={user}/>}/>
-
     <Route path="/login" element = { <LoginPage setUser={setUser}></LoginPage> } />
     
     </Routes>
