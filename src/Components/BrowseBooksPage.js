@@ -14,3 +14,5 @@ function BrowseBooksPage(){
         <h1>SHOW BOOKS HERE</h1>
     )
 }
+
+export default BrowseBooksPage
