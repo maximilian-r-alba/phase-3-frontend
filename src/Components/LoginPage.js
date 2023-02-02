@@ -1,10 +1,11 @@
 import {useState} from "react"
+import { Navigate } from "react-router-dom"
 
 function LoginPage ({setUser}) {
 
-const [isUserLoggedIn, setIsUserLoggedIn] = useState(false)
 
 const [loginParameters, setLoginParameters] = useState({username: "maricruz", password: "OGNuQjT"})
+const [isLoggedIn, setIsLoggedIn] = useState(false)
 
 function handleChange (e) {
       const key = e.target.name
@@ -22,7 +23,7 @@ function handleOnSubmit (e) {
         
     }
      function authUserLogin (usersArray) {
-      console.log(usersArray)
+      
       //potentially use .find method if you can gurantee no duplicate usernames in database
       const matchedUserName = usersArray.filter((user) => user.username == loginParameters.username)[0]
 
@@ -30,12 +31,12 @@ function handleOnSubmit (e) {
       
       if (authPassword){
         setUser({name: matchedUserName.name, avatar_url: matchedUserName.avatar_url, id: matchedUserName.id})
-        setIsUserLoggedIn(true)
+        setIsLoggedIn(true)
       }
     }
 
 return (<>
-  {!isUserLoggedIn ? <div>
+   <div>
         <p>Log In</p>
         <form onSubmit={handleOnSubmit}>
           <label>
@@ -51,8 +52,8 @@ return (<>
           <input type="submit" value = "Log in"></input>
 
         </form>
-      </div> : <h1>logged in!</h1>}
-
+      </div>
+    {isLoggedIn ? <Navigate to="/" /> : <></>}
 </>
 )
 }
