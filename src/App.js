@@ -3,7 +3,7 @@ import './App.css';
 
 function App() {
 
-  fetch("http://localhost:9292/")
+  fetch("http://localhost:9292/books")
   .then((r) => r.json())
   .then((data) => console.log(data));
 
