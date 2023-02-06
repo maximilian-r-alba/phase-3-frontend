@@ -13,6 +13,7 @@ function handleChange (e) {
     
       setLoginParameters({...loginParameters, [key]: value})
     }
+    
 function handleOnSubmit (e) {
       e.preventDefault()
 
