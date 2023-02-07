@@ -1,80 +1,16 @@
-import './BooksCard'
-import BooksCard from './BooksCard'
-import styled from 'styled-components'
-import {useState} from 'react'
-import { createPortal } from 'react-dom'
+import {useState, useEffect} from "react";
 
-function BookPage({books}){
+
+function BookPage(){
+
    
-    const bookCards = createBookCards(books)
-
-    const [renderedCards, setRenderedCards] = useState(bookCards)
-
-    const [viewTitle, setViewTitle] = useState("Books")
-
-    function createBookCards(bookArr){
-        return bookArr.map((book) => <BooksCard key = {book.id} book={book} />)
-    }
-
-    function handleSort(e){
-        const fictionValue = e.target.value
-        setViewTitle(fictionValue)
-        switch (fictionValue) {
-            case "Fiction":
-    
-            fetch("http://localhost:9292/books/genre/fiction")
-            .then(r => r.json())
-            .then(data => setRenderedCards(createBookCards(data)))
-
-                break;
-
-            case "Non-Fiction":
-            
-            fetch("http://localhost:9292/books/genre/nonfiction")
-            .then(r => r.json())
-            .then(data => setRenderedCards(createBookCards(data)))
-
-                break;
-
-            case "Author":
-
-                fetch("http://localhost:9292/books/author/alphabetical")
-                .then(r => r.json())
-                .then(data => setRenderedCards(createBookCards(data)))
-
-                break;
-
-            case "Books":
-                setRenderedCards(bookCards)
-                break;
-
-        }
-    }
-
-    return(
-    <>
-    <form>
-        <input type = "button" value = "Books" onClick={handleSort}></input>
-        <input type = "button" value = "Fiction" onClick={handleSort}></input>
-        <input type = "button" value = "Non-Fiction" onClick={handleSort}></input>
-        <input type = "button" value = "Author" onClick={handleSort}></input>
-    </form>
-   <h1>{viewTitle}</h1>
-    <Container>
-        {/* {filtered} */}
-        {renderedCards}
-    </Container>
-    </>
-
+    return (
+        <>
+            <h1>SHOW BOOK HERE</h1>
         
+        </>
+       
     )
 }
 
 export default BookPage
-
-const Container = styled.div`
-    display: flex;
-    flex-wrap:wrap;
-    justify-content: space-evenly;
-    gap: 30px;
-`
