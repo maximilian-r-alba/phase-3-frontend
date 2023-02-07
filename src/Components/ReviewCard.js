@@ -1,8 +1,8 @@
-function Review(){
+function ReviewCard({review}){
 
     return(
         <h1>REVIEW INFO</h1>
     )
 }
 
-export default Review
+export default ReviewCard
