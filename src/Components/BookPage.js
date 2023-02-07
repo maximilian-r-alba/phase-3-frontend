@@ -21,30 +21,22 @@ function BookPage({books}){
         setViewTitle(fictionValue)
         switch (fictionValue) {
             case "Fiction":
-            // const fictionBooks = books.filter((book) => book["fiction?"])
-            // setRenderedCards((createBookCards(fictionBooks)))
-
-            fetch("http://localhost:9292/books/fiction")
+    
+            fetch("http://localhost:9292/books/genre/fiction")
             .then(r => r.json())
             .then(data => setRenderedCards(createBookCards(data)))
 
                 break;
 
             case "Non-Fiction":
-            // const nonfictionBooks = books.filter((book) => !book["fiction?"])
-            // setRenderedCards((createBookCards(nonfictionBooks)))  
             
-            
-            fetch("http://localhost:9292/books/nonfiction")
+            fetch("http://localhost:9292/books/genre/nonfiction")
             .then(r => r.json())
             .then(data => setRenderedCards(createBookCards(data)))
 
                 break;
 
             case "Author":
-                // const authorSortList = books.sort((a,b) => a.author.localeCompare(b.author))
-
-                // setRenderedCards(createBookCards(authorSortList))
 
                 fetch("http://localhost:9292/books/author/alphabetical")
                 .then(r => r.json())
