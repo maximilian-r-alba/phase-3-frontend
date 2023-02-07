@@ -3,20 +3,20 @@ import ReviewCard from './ReviewCard'
 
 function BookPage({book}){
 
-    useEffect(() => {
-        fetch(`http:localhost:9292/books/${id}`)
-        .then(r => r.json())
-        .then(data => console.log(data))
-    }, [])
+    // useEffect(() => {
+    //     fetch(`http:localhost:9292/books/${id}`)
+    //     .then(r => r.json())
+    //     .then(data => console.log(data))
+    // }, [])
 
-    useEffect(() => {
-        fetch(`http:localhost:9292/books/${id}/reviews`)
-        .then(r => r.json())
-        .then(data => console.log(data))
-    }, [])
+    // useEffect(() => {
+    //     fetch(`http:localhost:9292/books/${id}/reviews`)
+    //     .then(r => r.json())
+    //     .then(data => console.log(data))
+    // }, [])
    
     function reviewsList(reviews){
-        reviewList = reviews.map((review) => <ReviewCard key={review.id} review={review} ></ReviewCard>)
+        const reviewList = reviews.map((review) => <ReviewCard key={review.id} review={review} ></ReviewCard>)
     }
 
     return (

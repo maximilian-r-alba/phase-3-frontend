@@ -1,7 +1,7 @@
 import styled from "styled-components"
 
 function BooksCard ({book}){
-
+// !!!!https://loremflickr.com/ documentation for loremflickr fix random image
     return (
         <BookDiv>
             <h1>{book.name}</h1>
