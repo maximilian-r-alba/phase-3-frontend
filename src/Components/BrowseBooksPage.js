@@ -3,6 +3,7 @@ import BooksCard from './BooksCard'
 import styled from 'styled-components'
 import {useState} from 'react'
 import { createPortal } from 'react-dom'
+import { NavLink } from "react-router-dom";
 
 function BrowseBooksPage({books}){
    
@@ -13,7 +14,12 @@ function BrowseBooksPage({books}){
     const [viewTitle, setViewTitle] = useState("Books")
 
     function createBookCards(bookArr){
-        return bookArr.map((book) => <BooksCard key = {book.id} book={book} />)
+        return bookArr.map((book) => <BooksCard key = {book.id} bookID={book.id} book={book} onClick={handleBookLink}/>)
+    }
+
+    function handleBookLink(e){
+        console.log(e.target.bookID)
+        // nest book card in nav link? or in a tag with href of /books/:id?
     }
 
     function handleSort(e){
