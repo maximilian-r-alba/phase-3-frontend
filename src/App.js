@@ -13,6 +13,7 @@ import BookPage from './Components/BookPage';
 
 function App() {
 
+  //maybe move books fetch and var to page, unless showing preview of books
   const [books, setBooks] = useState([])
   useEffect(() => {
     fetch("http://localhost:9292/books")
