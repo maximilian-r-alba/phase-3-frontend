@@ -9,14 +9,22 @@ function BookPage({book}){
     //     .then(data => console.log(data))
     // }, [])
 
-    // useEffect(() => {
-    //     fetch(`http:localhost:9292/books/${id}/reviews`)
-    //     .then(r => r.json())
-    //     .then(data => console.log(data))
-    // }, [])
+    const [reviews, setReviews] = useState([])
+    const [renderedReviews, setRenderedReviews] = useState(null)
+
+    useEffect(() => {
+        fetch(`http:localhost:9292/books/${id}/reviews`)
+        .then(r => r.json())
+        .then(data => setReviews(data))
+    }, [])
    
-    function reviewsList(reviews){
-        const reviewList = reviews.map((review) => <ReviewCard key={review.id} review={review} ></ReviewCard>)
+    useEffect(() => {
+        setRenderedReviews(reviewsList(reviews))
+    }, [reviews])
+
+    function reviewsList(reviewsArr){
+        const reviewList = reviewsArr.map((review) => <ReviewCard key={review.id} review={review} ></ReviewCard>)
+        return reviewList
     }
 
     return (
@@ -28,7 +36,7 @@ function BookPage({book}){
             <p>{book.summary}</p>
 
             <div>
-                {/* reviews here */}
+                {renderedReviews ? renderedReviews : <p>No reviews have been made</p>}
             </div>
         </>
        

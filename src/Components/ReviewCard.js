@@ -1,7 +1,15 @@
+import { useEffect } from "react"
 function ReviewCard({review}){
 
+
     return(
-        <h1>REVIEW INFO</h1>
+       <div>
+        <h1>{review.title}</h1>
+        <p>{review.rating}</p>
+        <p>{review.content}</p>
+        <p>{review.user.name}</p>
+
+       </div>
     )
 }
 
