@@ -7,7 +7,6 @@ import { NavLink } from "react-router-dom";
 
 function BrowseBooksPage({books , setBooks}){
 
-    
     useEffect(() => {
         fetch("http://localhost:9292/books")
           .then(r => r.json())
@@ -15,12 +14,9 @@ function BrowseBooksPage({books , setBooks}){
       }, [])
 
       useEffect(() => {
+        setViewTitle("Books")
         setRenderedCards(createBookCards(books))
       }, [books])
-
-      console.log('in browse', books)
-     
-    const [bookCards, setBookCards] = useState([])
 
     const [renderedCards, setRenderedCards] = useState(createBookCards(books))
 
@@ -40,31 +36,27 @@ function BrowseBooksPage({books , setBooks}){
         setViewTitle(fictionValue)
         switch (fictionValue) {
             case "Fiction":
-    
-            fetch("http://localhost:9292/books/genre/fiction")
-            .then(r => r.json())
-            .then(data => setRenderedCards(createBookCards(data)))
-
+                fetch("http://localhost:9292/books/genre/fiction")
+                    .then(r => r.json())
+                    .then(data => setRenderedCards(createBookCards(data)))
                 break;
 
             case "Non-Fiction":
-            
-            fetch("http://localhost:9292/books/genre/nonfiction")
-            .then(r => r.json())
-            .then(data => setRenderedCards(createBookCards(data)))
-
+                fetch("http://localhost:9292/books/genre/nonfiction")
+                    .then(r => r.json())
+                    .then(data => setRenderedCards(createBookCards(data)))
                 break;
 
             case "Author":
-
                 fetch("http://localhost:9292/books/author/alphabetical")
-                .then(r => r.json())
-                .then(data => setRenderedCards(createBookCards(data)))
-
+                    .then(r => r.json())
+                    .then(data => setRenderedCards(createBookCards(data)))
                 break;
 
             case "Books":
-                // setRenderedCards(bookCards)
+                fetch("http://localhost:9292/books")
+                    .then(r => r.json())
+                    .then(data => setRenderedCards(createBookCards(data)))
                 break;
 
         }
