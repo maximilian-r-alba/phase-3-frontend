@@ -1,20 +1,34 @@
 import styled from "styled-components"
 import { useState } from "react"
 
-function BookForm(){
+function BookForm({books, setBooks}){
 
-    const defaultFormValues = {title: "", author: "", summary:"", cover_url: "", "fiction?":true }
+    const defaultFormValues = {title: "", author: "", summary:"", cover_url: "", subgenre: "", "fiction?":true }
     const [formValues, setFormValues] = useState(defaultFormValues)
 
     function updateFormValues(e){
-        console.log(e.target.name)
+ 
         const key = e.target.name
-        const value = e.target.value
-        setFormValues(...formValues, formValues[key] = value)
+        const value = e.target.value    
+        setFormValues({...formValues, [key]: value})
+    
     }
 
+    function submitBook(e){
+        e.preventDefault()
+        fetch("http://localhost:9292/books",{
+            method: "POST",
+            headers:{"Content-Type": "application/json"},
+            body: JSON.stringify(formValues)
+        })
+        .then(r=>r.json())
+        .then(data=>setBooks(books => [...books, data]))
+    }
+
+    console.log(books)
+    
     return (
-        <StyledForm>
+        <StyledForm onSubmit={submitBook}>
             <label>
                 Title:
                 <input type="text" name="title" value = {formValues['title']} onChange={updateFormValues}/>
@@ -23,18 +37,19 @@ function BookForm(){
                 Author:
                 <input type="text" name="author" value = {formValues['author']} onChange={updateFormValues}/>
             </label>
+            <label>
+                Genre:
+                <input type="text" name="subgenre" value = {formValues['subgenre']} onChange={updateFormValues}/>
+            </label>
 
-            <div onChange={updateFormValues} >
             <label>
                 Fiction
-                <input type="radio" name="fiction?" value = {true} checked = {true}/>
+                <input type="radio" name="fiction?" value = {true} defaultChecked onChange={updateFormValues}/>
             </label>
             <label>
                 Nonfiction
-                <input type="radio" name="fiction?" value = {false} />
+                <input type="radio" name="fiction?" value = {false} onChange={updateFormValues}/>
             </label>
-
-            </div>
             
             <label>
                 Summary:
