@@ -16,23 +16,18 @@ function App() {
   
   //maybe move books fetch and var to page, unless showing preview of books
   const [books, setBooks] = useState([])
-  // useEffect(() => {
-  //   fetch("http://localhost:9292/books")
-  //     .then(r => r.json())
-  //     .then(data => setBooks(data))
-  // }, [])
  
   const [user, setUser] = useState(null)
-    
+    console.log('in app' , books)
   return (
     <>
         <h1>Do Robots Read About Electric Sheep</h1>
     <NavBar></NavBar>
-    <BookForm/>
+    <BookForm books={books} setBooks={setBooks}/>
     <Routes>
     <Route path="/" element = {<LandingPage user={user} />}/>
     {/* <Route path="/books" element = {/<h1>SHOW BOOKS HERE</h1>}/> */}
-    <Route path="/books" element = {<BrowseBooksPage books = {books}/>}/>
+    <Route path="/books" element = {<BrowseBooksPage books = {books} setBooks={setBooks}/>}/>
     <Route path="/profile" element = {<h1>SHOW PROFILE HERE</h1>}/>
 
     <Route path="/login" element = { <LoginPage setUser={setUser}></LoginPage> } />
