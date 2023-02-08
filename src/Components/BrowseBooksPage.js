@@ -1,13 +1,26 @@
 import './BooksCard'
 import BooksCard from './BooksCard'
 import styled from 'styled-components'
-import {useState} from 'react'
+import {useState , useEffect} from 'react'
 import { createPortal } from 'react-dom'
 import { NavLink } from "react-router-dom";
 
-function BrowseBooksPage({books}){
-   
-    const bookCards = createBookCards(books)
+function BrowseBooksPage({books , setBooks}){
+
+    
+    useEffect(() => {
+        fetch("http://localhost:9292/books")
+          .then(r => r.json())
+          .then(data => setBooks(data))
+      }, [])
+
+      useEffect(() => {
+        setBookCards(createBookCards(books))
+      }, [books])
+
+      console.log('in browse', books)
+     
+    const [bookCards, setBookCards] = useState([])
 
     const [renderedCards, setRenderedCards] = useState(bookCards)
 
