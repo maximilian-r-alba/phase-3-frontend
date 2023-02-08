@@ -15,14 +15,14 @@ function BrowseBooksPage({books , setBooks}){
       }, [])
 
       useEffect(() => {
-        setBookCards(createBookCards(books))
+        setRenderedCards(createBookCards(books))
       }, [books])
 
       console.log('in browse', books)
      
     const [bookCards, setBookCards] = useState([])
 
-    const [renderedCards, setRenderedCards] = useState(bookCards)
+    const [renderedCards, setRenderedCards] = useState(createBookCards(books))
 
     const [viewTitle, setViewTitle] = useState("Books")
 
@@ -64,7 +64,7 @@ function BrowseBooksPage({books , setBooks}){
                 break;
 
             case "Books":
-                setRenderedCards(bookCards)
+                // setRenderedCards(bookCards)
                 break;
 
         }
