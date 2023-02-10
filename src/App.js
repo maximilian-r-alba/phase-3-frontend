@@ -8,51 +8,39 @@ import NavBar from './Components/NavBar';
 import LandingPage from './Components/LandingPage';
 import BookForm from './Components/BookForm';
 import BrowseBooksPage from './Components/BrowseBooksPage';
+import ProfilePage from './Components/ProfilePage'
+import BookPage from './Components/BookPage';
 
 function App() {
   
-  //maybe move books fetch and var to page, unless showing preview of books
+  //maybe move books var to browsepage, unless showing preview of books
   const [books, setBooks] = useState([])
  
   const [user, setUser] = useState(false)
 
-  useEffect(() => {
-    setBook(JSON.parse(bookJSON))
-  },[])
+  const [viewForm, setViewForm] = useState(false)
 
-  
-  const [book, setBook] = useState(null)
-  const book1 = {title: "The Gunslinger", cover_url: "http:asdfasfdasdf.com", author: "Stephen King", subgenre: "Fantasy", summary:""}
-  const bookJSON = "{\"id\":1,\"name\":\"The Last Temptation\",\"subgenre\":\"Biography/Autobiography\",\"author\":\"Dixie Grady\",\"rating\":1.0,\"cover_url\":\"https://loremflickr.com/640/480/book,title,cover\",\"summary\":\"[\\\"Sint in iusto. Alias quia adipisci. Autem quos sit.\\\"]\",\"fiction?\":true}"
-
-
+  function handleViewForm (e) {
+    setViewForm(!viewForm)
+  }
 
   return (
 
     <>
-    <h1>hello world</h1>
-{ book ? <> <h1>{book.title}</h1> 
-            <p>By: {book.author}</p>
-            <p>{book.subgenre}</p>
-            <p>{book.summary}</p> </> : <></>}
+    <h1>Do Robots Read About Electric Sheep</h1>
+    <NavBar user = {user} setUser = {setUser}></NavBar>
 
-            {/* <div>
-                {renderedReviews ? renderedReviews : <p>No reviews have been made</p>}
-            </div>  */}
-        </>
-    // <>
-    //     <h1>Do Robots Read About Electric Sheep</h1>
-    // <NavBar></NavBar>
-    // <BookForm books={books} setBooks={setBooks}/>
-    // <Routes>
-    // <Route path="/" element = {<LandingPage user={user} />}/>
-    // <Route path="/books" element = {<BrowseBooksPage books = {books} setBooks={setBooks}/>}/>
-    // { user ? <Route path="/profile" element = {<ProfilePage user={user} />}/> : <></>}
+    {user ? <button onClick={handleViewForm}>Add Book</button> : <></>}
+    {viewForm ? <BookForm books={books} setBooks={setBooks}/> : <></>}
 
-    // <Route path="/login" element = { !user ? <LoginPage setUser={setUser}></LoginPage> : <button onClick={setUser(null)}>Logout</button>} />
-    
-    // </Routes>
-    // </>
+    <Routes>
+      <Route path="/" element = {<LandingPage user={user} />}/>
+      <Route path="/books" element = {<BrowseBooksPage books = {books} setBooks={setBooks}/>}/>
+      <Route path="/books/:id" element = {<BookPage />} />
+      <Route path="/profile" element = {<ProfilePage user={user} />}/>
+      <Route path="/login" element = {<LoginPage setUser={setUser}></LoginPage>} />
+    </Routes>
+    </>
   );
 }
 
