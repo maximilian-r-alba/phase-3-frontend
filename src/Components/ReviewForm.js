@@ -1,9 +1,9 @@
 import  styled  from "styled-components"
 import { useState } from "react"
 
-function ReviewForm({handleViewForm}){
+function ReviewForm({ user , handleViewForm}){
 
-
+    const [reviewValues, setReviewValues] = useState()
 
     return (
         <StyledDiv>
