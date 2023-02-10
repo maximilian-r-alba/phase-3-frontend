@@ -25,12 +25,7 @@ function BrowseBooksPage({books , setBooks}){
 
 
     function createBookCards(bookArr){
-        return bookArr.map((book) => <BooksCard key = {book.id} book={book} handleBookLink={handleBookLink}/>)
-    }
-
-    function handleBookLink(e){
-        console.log(e.target)
-        // nest book card in nav link? or in a tag with href of /books/:id?
+        return bookArr.map((book) => <BooksCard key = {book.id} book={book} />)
     }
 
     function handleSort(e){
