@@ -7,6 +7,10 @@ import { NavLink } from "react-router-dom";
 
 function BrowseBooksPage({books , setBooks}){
 
+    const [renderedCards, setRenderedCards] = useState(createBookCards(books))
+
+    const [viewTitle, setViewTitle] = useState("Books")
+
     useEffect(() => {
         fetch("http://localhost:9292/books")
           .then(r => r.json())
@@ -18,16 +22,14 @@ function BrowseBooksPage({books , setBooks}){
         setRenderedCards(createBookCards(books))
       }, [books])
 
-    const [renderedCards, setRenderedCards] = useState(createBookCards(books))
 
-    const [viewTitle, setViewTitle] = useState("Books")
 
     function createBookCards(bookArr){
-        return bookArr.map((book) => <BooksCard key = {book.id} bookID={book.id} book={book} onClick={handleBookLink}/>)
+        return bookArr.map((book) => <BooksCard key = {book.id} book={book} handleBookLink={handleBookLink}/>)
     }
 
     function handleBookLink(e){
-        console.log(e.target.bookID)
+        console.log(e.target)
         // nest book card in nav link? or in a tag with href of /books/:id?
     }
 
