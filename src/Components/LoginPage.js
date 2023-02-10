@@ -27,16 +27,13 @@ function handleOnSubmit (e) {
      function authUserLogin (usersArray) {
       
       //potentially use .find method if you can gurantee no duplicate usernames in database
-      console.log(usersArray)
-      const matchedUserName = usersArray.filter((user) => user.username === loginParameters.username)[0]
+     
+      const matchedUser = usersArray.filter((user) => user.username === loginParameters.username)[0]
 
-      console.log(matchedUserName)
-
-      const authPassword = matchedUserName.password === loginParameters.password
+      const authPassword = matchedUser.password === loginParameters.password
       
       if (authPassword){
-        setUser({name: matchedUserName.name, avatar_url: matchedUserName.avatar_url, id: matchedUserName.id})
-        console.log("set user run")
+        setUser({name: matchedUser.name, avatar_url: matchedUser.avatar_url, id: matchedUser.id, bio: matchedUser.bio})
         setIsLoggedIn(true)
       }
     }
