@@ -25,7 +25,7 @@ function BookForm({books, setBooks}){
         .then(data=>setBooks(books => [...books, data]))
     }
 
-    console.log(books)
+
     
     return (
         <StyledForm onSubmit={submitBook}>
