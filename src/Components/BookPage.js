@@ -28,7 +28,7 @@ function BookPage(){
     }, [reviews])
 
     function createReviewsList(reviewsArr){
-        const reviewList = reviewsArr.map((review) => <ReviewCard key={review.id} review={review} ></ReviewCard>)
+        const reviewList = reviewsArr.map((review) => <ReviewCard key={`reviewKey${review.id}`} review={review} ></ReviewCard>)
         return reviewList
     }
     
