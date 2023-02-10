@@ -1,5 +1,7 @@
 import {useState, useEffect} from "react";
+import { createPortal } from "react-dom";
 import ReviewCard from './ReviewCard'
+import ReviewForm from "./ReviewForm";
 import { useParams } from "react-router-dom";
 
 function BookPage(){
@@ -8,6 +10,10 @@ function BookPage(){
     const [book, setBook] = useState(undefined)
     const [reviews, setReviews] = useState([])
     const [renderedReviews, setRenderedReviews] = useState(null)
+    const [viewReviewForm, setViewReviewForm] = useState(false)
+    const portalSite = document.getElementById('portalMount')
+
+    console.log(portalSite)
     
     useEffect(() => {
         fetch(`http://localhost:9292/books/${id}/reviews`)
@@ -32,6 +38,10 @@ function BookPage(){
         return reviewList
     }
     
+    function handleViewForm(e){
+        setViewReviewForm(!viewReviewForm)
+    }
+    
     return (
         <>
             {book ? <> <h1>{book.title}</h1>
@@ -40,12 +50,12 @@ function BookPage(){
             <p>{book.subgenre}</p>
             <p>{book.summary}</p>
             <p>Rating is {book.rating}</p>
-
+            <button onClick={handleViewForm}>Leave a Review</button>
             <div>
                 {renderedReviews ? renderedReviews : <p>No reviews have been made</p>}
             </div>
-            
             </> : <p>Loading Book</p>}
+            {viewReviewForm ? createPortal(<ReviewForm handleViewForm = {handleViewForm}/>, portalSite) : <></>}
         </>
        
     )
