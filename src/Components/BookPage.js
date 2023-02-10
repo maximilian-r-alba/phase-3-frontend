@@ -31,7 +31,6 @@ function BookPage(){
         const reviewList = reviewsArr.map((review) => <ReviewCard key={review.id} review={review} ></ReviewCard>)
         return reviewList
     }
-
     
     return (
         <>
