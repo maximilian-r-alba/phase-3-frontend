@@ -13,7 +13,7 @@ function ProfilePage({user}){
     }, [])    
 
     function renderReviews (reivewsArr) {
-        const renderedReviews = reivewsArr.map((review) => <ReviewCard review={review} givenUser={true}/>)
+        const renderedReviews = reivewsArr.map((review) => <ReviewCard key={`reviewKey${review.id}`} review={review} givenUser={true}/>)
         return renderedReviews
     }
 
