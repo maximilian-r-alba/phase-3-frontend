@@ -8,7 +8,6 @@ function ReviewCard({review}){
         <p>{review.rating}</p>
         <p>{review.content}</p>
         <p>{review.user.name}</p>
-
        </div>
     )
 }
