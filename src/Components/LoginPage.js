@@ -4,7 +4,7 @@ import { Navigate } from "react-router-dom"
 function LoginPage ({setUser}) {
 
 
-const [loginParameters, setLoginParameters] = useState({username: "maricruz", password: "OGNuQjT"})
+const [loginParameters, setLoginParameters] = useState({username: "cristie", password: "gRYw"})
 const [isLoggedIn, setIsLoggedIn] = useState(false)
 
 function handleChange (e) {
@@ -23,10 +23,14 @@ function handleOnSubmit (e) {
         setLoginParameters({username:"", password:""})
         
     }
+
      function authUserLogin (usersArray) {
       
       //potentially use .find method if you can gurantee no duplicate usernames in database
+      console.log(usersArray)
       const matchedUserName = usersArray.filter((user) => user.username === loginParameters.username)[0]
+
+      console.log(matchedUserName)
 
       const authPassword = matchedUserName.password === loginParameters.password
       
