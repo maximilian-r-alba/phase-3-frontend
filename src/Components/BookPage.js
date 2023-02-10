@@ -1,17 +1,12 @@
 import {useState, useEffect} from "react";
 import ReviewCard from './ReviewCard'
+import { useParams } from "react-router-dom";
 
 function BookPage({book}){
 
-    // useEffect(() => {
-    //     fetch(`http:localhost:9292/books/${id}`)
-    //     .then(r => r.json())
-    //     .then(data => console.log(data))
-    // }, [])
-
     const [reviews, setReviews] = useState([])
     const [renderedReviews, setRenderedReviews] = useState(null)
-
+    const {id} = useParams()
     useEffect(() => {
         fetch(`http:localhost:9292/books/${id}/reviews`)
         .then(r => r.json())
@@ -19,10 +14,10 @@ function BookPage({book}){
     }, [])
    
     useEffect(() => {
-        setRenderedReviews(reviewsList(reviews))
+        setRenderedReviews(createReviewsList(reviews))
     }, [reviews])
 
-    function reviewsList(reviewsArr){
+    function createReviewsList(reviewsArr){
         const reviewList = reviewsArr.map((review) => <ReviewCard key={review.id} review={review} ></ReviewCard>)
         return reviewList
     }
