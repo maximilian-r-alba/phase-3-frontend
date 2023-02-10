@@ -1,11 +1,11 @@
 import styled from "styled-components"
 import { Link } from "react-router-dom"
 
-function BooksCard ({book , handleBookLink}){
+function BooksCard ({book}){
 
     return (
         <Link to={`/books/${book.id}`}>
-        <BookDiv onClick = {handleBookLink} id = {`book${book.id}`}>
+        <BookDiv id = {`book${book.id}`}>
             <h1>{book.title}</h1>
             <img src={`${book.cover_url}?random=${Math.floor(Math.random() * 50)}`}></img>
             <p>{book.author}</p>
