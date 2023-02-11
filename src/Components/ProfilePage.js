@@ -1,10 +1,12 @@
 import {useState , useEffect} from "react";
 import ReviewCard from "./ReviewCard";
+import { useContext } from "react";
+import { UserContext } from "./UserContext";
 
-function ProfilePage({user}){
+function ProfilePage(){
 
     const [reviews, setReviews] = useState([])
-
+    const user = useContext(UserContext)
     
     useEffect(() => {
         fetch(`http://localhost:9292/users/${user.id}/reviews`)
@@ -22,8 +24,10 @@ function ProfilePage({user}){
             <h1>{user.name}</h1>
             <img src={user.avatar_url} alt="user avatar"/>
             <p>{user.bio}</p>
-            <h1>PROFILE PAGE HERE</h1>
+            <ul>
             {renderReviews(reviews)}
+            </ul>
+            
         </>
 
     )

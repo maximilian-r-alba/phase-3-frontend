@@ -11,6 +11,8 @@ import BrowseBooksPage from './Components/BrowseBooksPage';
 import ProfilePage from './Components/ProfilePage'
 import BookPage from './Components/BookPage';
 
+import { UserContext } from './Components/UserContext';
+
 function App() {
   
   //maybe move books var to browsepage, unless showing preview of books
@@ -32,14 +34,16 @@ function App() {
 
     {user ? <button onClick={handleViewForm}>Add Book</button> : <></>}
     {viewForm ? <BookForm books={books} setBooks={setBooks}/> : <></>}
-
-    <Routes>
-      <Route path="/" element = {<LandingPage user={user} />}/>
-      <Route path="/books" element = {<BrowseBooksPage books = {books} setBooks={setBooks}/>}/>
-      <Route path="/books/:id" element = {<BookPage />} />
-      <Route path="/profile" element = {<ProfilePage user={user} />}/>
-      <Route path="/login" element = {<LoginPage setUser={setUser}></LoginPage>} />
-    </Routes>
+    <UserContext.Provider value = {user}>
+      <Routes>
+        <Route path="/" element = {<LandingPage user={user} />}/>
+        <Route path="/books" element = {<BrowseBooksPage books = {books} setBooks={setBooks}/>}/>
+        <Route path="/books/:id" element = {<BookPage />} />
+        <Route path="/profile" element = {<ProfilePage user={user} />}/>
+        <Route path="/login" element = {<LoginPage setUser={setUser}></LoginPage>} />
+      </Routes>
+    </UserContext.Provider>
+   
     </>
   );
 }

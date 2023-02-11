@@ -4,7 +4,7 @@ import { Navigate } from "react-router-dom"
 function LoginPage ({setUser}) {
 
 
-const [loginParameters, setLoginParameters] = useState({username: "cristie", password: "gRYw"})
+const [loginParameters, setLoginParameters] = useState({username: "socorro", password: "vXxT"})
 const [isLoggedIn, setIsLoggedIn] = useState(false)
 
 function handleChange (e) {
