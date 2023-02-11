@@ -12,8 +12,6 @@ function BookPage(){
     const [renderedReviews, setRenderedReviews] = useState(null)
     const [viewReviewForm, setViewReviewForm] = useState(false)
     const portalSite = document.getElementById('portalMount')
-
-    console.log(portalSite)
     
     useEffect(() => {
         fetch(`http://localhost:9292/books/${id}/reviews`)
@@ -48,17 +46,25 @@ function BookPage(){
 
     return (
         <>
-            {book ? <> <h1>{book.title}</h1>
+            {book ? 
+            <> 
+            
+            <h1>{book.title}</h1>
             <img src={book.cover_url} alt="book cover image"></img>
             <p>By: {book.author}</p>
             <p>{book.subgenre}</p>
             <p>{book.summary}</p>
             <p>Rating is {book.rating}</p>
+            
             <button onClick={handleViewForm}>Leave a Review</button>
+
             <div>
                 {renderedReviews ? renderedReviews : <p>No reviews have been made</p>}
             </div>
-            </> : <p>Loading Book</p>}
+            </> 
+            
+            : <p>Loading Book</p>}
+
             {viewReviewForm ? createPortal(<ReviewForm handleViewForm = {handleViewForm} book_id = {book.id}/>, portalSite) : <></>}
         </>
        
