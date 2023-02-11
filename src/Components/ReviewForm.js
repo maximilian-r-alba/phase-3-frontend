@@ -1,13 +1,28 @@
 import  styled  from "styled-components"
 import { useState } from "react"
 
-function ReviewForm({ user , handleViewForm}){
+function ReviewForm({ user , book_id , handleViewForm}){
 
     const [reviewValues, setReviewValues] = useState()
 
+    console.log(book_id)
     return (
         <StyledDiv>
             <button onClick={handleViewForm}>X</button>
+            <form>
+            <label>
+                Title:
+                <input type="text" name="title" />
+            </label>
+            <label>
+                Rating:
+                <input type="text" name="title" />
+            </label>
+            <label>
+                Reivew:
+                <textarea type="text" name="title" />
+            </label>
+            </form>
         </StyledDiv>
     )
 }
