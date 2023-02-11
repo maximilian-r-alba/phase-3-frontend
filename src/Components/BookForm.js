@@ -60,7 +60,7 @@ function BookForm({books, setBooks}){
                 <input type="text" name="cover_url" value = {formValues['cover_url']} onChange={updateFormValues}/>
             </label>
             <label>
-                <input type="submit" name="cover_url"/>
+                <input type="submit"/>
             </label>
         </StyledForm>
     )
