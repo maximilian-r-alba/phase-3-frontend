@@ -42,6 +42,10 @@ function BookPage(){
         setViewReviewForm(!viewReviewForm)
     }
     
+
+
+    
+
     return (
         <>
             {book ? <> <h1>{book.title}</h1>
@@ -55,7 +59,7 @@ function BookPage(){
                 {renderedReviews ? renderedReviews : <p>No reviews have been made</p>}
             </div>
             </> : <p>Loading Book</p>}
-            {viewReviewForm ? createPortal(<ReviewForm handleViewForm = {handleViewForm}/>, portalSite) : <></>}
+            {viewReviewForm ? createPortal(<ReviewForm handleViewForm = {handleViewForm} book_id = {book.id}/>, portalSite) : <></>}
         </>
        
     )
