@@ -22,6 +22,10 @@ function App() {
 
   const [viewForm, setViewForm] = useState(false)
 
+  const [viewLoginForm, setViewLoginForm] = useState(false)
+
+  const portalSite = document.getElementById('portalMount')
+
   function handleViewForm (e) {
     setViewForm(!viewForm)
   }
@@ -30,18 +34,21 @@ function App() {
 
     <>
     <h1>Do Robots Read About Electric Sheep</h1>
-    <NavBar user = {user} setUser = {setUser}></NavBar>
+  <UserContext.Provider value = {user}>
+    <NavBar setViewLoginForm={setViewLoginForm} setUser = {setUser}></NavBar>
 
     {user ? <button onClick={handleViewForm}>Add Book</button> : <></>}
-    {viewForm ? <BookForm books={books} setBooks={setBooks}/> : <></>}
-    <UserContext.Provider value = {user}>
+    {viewForm ? <BookForm handleViewForm={handleViewForm} portalSite={portalSite} books={books} setBooks={setBooks}/> : <></>}
+    {viewLoginForm ? <LoginPage portalSite={portalSite} setUser={setUser} setViewLoginForm={setViewLoginForm}></LoginPage> : <></>}
+   
       <Routes>
         <Route path="/" element = {<LandingPage user={user} />}/>
         <Route path="/books" element = {<BrowseBooksPage books = {books} setBooks={setBooks}/>}/>
-        <Route path="/books/:id" element = {<BookPage />} />
-        <Route path="/profile" element = {<ProfilePage user={user} />}/>
-        <Route path="/login" element = {<LoginPage setUser={setUser}></LoginPage>} />
+        <Route path="/books/:id" element = {<BookPage portalSite={portalSite}/>} />
+        <Route path="/profile" element = {<ProfilePage />}/>
+        {/* <Route path="/login" element = {<LoginPage portalSite={portalSite} setUser={setUser}></LoginPage>} /> */}
       </Routes>
+
     </UserContext.Provider>
    
     </>
