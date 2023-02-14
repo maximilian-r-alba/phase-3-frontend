@@ -1,11 +1,15 @@
 import {useState} from "react"
-import { Navigate } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
+import { createPortal } from "react-dom"
+import styled from "styled-components"
 
-function LoginPage ({setUser}) {
+
+function LoginPage ({setUser , portalSite , setViewLoginForm}) {
 
 
-const [loginParameters, setLoginParameters] = useState({username: "socorro", password: "vXxT"})
+const [loginParameters, setLoginParameters] = useState({username: "rufusruf", password: "DfYTno"})
 const [isLoggedIn, setIsLoggedIn] = useState(false)
+const navigate = useNavigate()
 
 function handleChange (e) {
       const key = e.target.name
@@ -35,11 +39,12 @@ function handleOnSubmit (e) {
       if (authPassword){
         setUser({name: matchedUser.name, avatar_url: matchedUser.avatar_url, id: matchedUser.id, bio: matchedUser.bio})
         setIsLoggedIn(true)
+        setViewLoginForm(false)
       }
     }
 
 return (<>
-   <div>
+   {createPortal(<FormDiv>
         <p>Log In</p>
         <form onSubmit={handleOnSubmit}>
           <label>
@@ -55,10 +60,21 @@ return (<>
           <input type="submit" value = "Log in"></input>
 
         </form>
-      </div>
-    {isLoggedIn ? <Navigate to="/" /> : <></>}
+      </FormDiv>, portalSite)}
+    {isLoggedIn ? navigate("/") : <></>}
 </>
 )
 }
 
 export default LoginPage;
+
+const FormDiv = styled.div `
+position: fixed;
+top: 15vh;
+left: 25vw;
+border: solid;
+height: 10vh;
+width: 50vw;
+opacity: 1;
+background-color: white;
+`
