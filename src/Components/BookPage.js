@@ -3,23 +3,31 @@ import { createPortal } from "react-dom";
 import ReviewCard from './ReviewCard'
 import ReviewForm from "./ReviewForm";
 import { useParams } from "react-router-dom";
+import { UserContext } from "./UserContext";
+import { useContext } from "react";
 
-function BookPage(){
+function BookPage({portalSite}){
 
     const {id} = useParams()
     const [book, setBook] = useState(undefined)
     const [reviews, setReviews] = useState([])
     const [renderedReviews, setRenderedReviews] = useState(null)
     const [viewReviewForm, setViewReviewForm] = useState(false)
-    const portalSite = document.getElementById('portalMount')
     
+    const user = useContext(UserContext)
+
+    //get reviews for specified book
     useEffect(() => {
         fetch(`http://localhost:9292/books/${id}/reviews`)
         .then(r => r.json())
         .then(data => setReviews(data))
     }, [])
-   
+    //render review cards for reviews when state changes by calling createReviewsList
+    useEffect(() => {
+        setRenderedReviews(createReviewsList(reviews))
+    }, [reviews])
 
+    //get specified book info
     useEffect(() => {
         fetch(`http://localhost:9292/books/${id}`)
         .then(r => r.json())
@@ -27,22 +35,46 @@ function BookPage(){
     }, [])
    
 
-    useEffect(() => {
-        setRenderedReviews(createReviewsList(reviews))
-    }, [reviews])
-
+    //maps reviewsArray with ReviewCard component
     function createReviewsList(reviewsArr){
-        const reviewList = reviewsArr.map((review) => <ReviewCard key={`reviewKey${review.id}`} review={review} ></ReviewCard>)
+        const reviewList = reviewsArr.map((review) => <ReviewCard key={`reviewKey${review.id}`} review={review} handleViewForm={handleViewForm} setPassedReview={setPassedReview}></ReviewCard>)
         return reviewList
     }
     
+    const [passedReview, setPassedReview] = useState(undefined)
     function handleViewForm(e){
-        setViewReviewForm(!viewReviewForm)
+        setViewReviewForm(viewReviewForm => !viewReviewForm)
+        setPassedReview(undefined)
     }
-    
 
+    function postReview(reviewValues){
+        fetch(`http://localhost:9292/reviews`, {
+            method: 'POST', 
+            headers:{'Content-Type': 'application/json'},
+            body:JSON.stringify(reviewValues)
+        })
+        .then(r=> r.json())
+        .then(data => setReviews([...reviews, data]))
+    }
 
-    
+    function patchReview(reviewValues){
+        
+        fetch(`http://localhost:9292/reviews/${reviewValues.id}`, {
+            method: 'PATCH', 
+            headers:{'Content-Type': 'application/json'},
+            body:JSON.stringify(reviewValues)
+        })
+        .then(r=> r.json())
+        .then(data => console.log(data))
+        editReview(reviewValues)
+    }
+
+    function editReview(reviewValues) {
+        const reviewID = reviewValues.id
+        const filteredReviews = reviews.filter((review) => review.id !== reviewID)
+        console.log(filteredReviews , reviewValues)
+        
+    }
 
     return (
         <>
@@ -55,8 +87,8 @@ function BookPage(){
             <p>{book.subgenre}</p>
             <p>{book.summary}</p>
             <p>Rating is {book.rating}</p>
-            
-            <button onClick={handleViewForm}>Leave a Review</button>
+
+            {user ? <button onClick={handleViewForm}>Leave a Review</button> : <button>Login to Review</button>}
 
             <div>
                 {renderedReviews ? renderedReviews : <p>No reviews have been made</p>}
@@ -65,7 +97,7 @@ function BookPage(){
             
             : <p>Loading Book</p>}
 
-            {viewReviewForm ? createPortal(<ReviewForm handleViewForm = {handleViewForm} book_id = {book.id}/>, portalSite) : <></>}
+            {viewReviewForm ? createPortal(<ReviewForm review={passedReview} postReview = {postReview} patchReview ={patchReview} handleViewForm = {handleViewForm} book_id = {book.id}/>, portalSite) : <></>}
         </>
        
     )

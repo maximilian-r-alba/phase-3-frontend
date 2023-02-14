@@ -1,12 +1,19 @@
 import  styled  from "styled-components"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useContext } from "react"
 import { UserContext } from "./UserContext"
 
-function ReviewForm({ book_id , handleViewForm}){
+function ReviewForm({ book_id , handleViewForm , postReview, review, patchReview}){
 
     const user = useContext(UserContext)
     const [reviewValues, setReviewValues] = useState({user_id: user.id, book_id: book_id, title: "", rating: "", content: ""})
+
+
+    useEffect(() => {
+        if (review) {
+            setReviewValues({id: review.id, user_id: review.user_id, book_id: review.book_id, title: review.title, rating: review.rating, content: review.content})
+        }
+    }, [])
 
     function updateFormValues(e){
         
@@ -25,10 +32,17 @@ function ReviewForm({ book_id , handleViewForm}){
     
     }
 
-    function handleSubmit(e){
-        e.preventDefault()
-        console.log(reviewValues)
+   function handleSubmit(e){
+    e.preventDefault()
+    if(review){
+        patchReview(reviewValues)
     }
+    else{
+        postReview(reviewValues)
+    }
+    
+    handleViewForm()
+   }
 
     return (
         <StyledDiv>
@@ -43,8 +57,8 @@ function ReviewForm({ book_id , handleViewForm}){
                 <input type="number" name="rating" min="1" max="5" value={reviewValues.rating} onChange={updateFormValues}/>
             </label>
             <label>
-                Reivew:
-                <textarea type="text" name="content" value={reviewValues.content} onChange={updateFormValues}/>
+                Review:
+                <textarea type="text" name="content" value={reviewValues.content} onChange={updateFormValues} rows="8" cols="45"/>
             </label>
             <label>
                 <input type="submit"/>
@@ -59,10 +73,33 @@ export default ReviewForm
 const StyledDiv = styled.div `
 position: fixed;
 top: 15vh;
-left: 25vw;
+left: 35vw;
 border: solid;
-height: 50vh;
-width: 50vw;
+height: 70vh;
+width: 30vw;
 opacity: 1;
 background-color: white;
+
+form{
+ display: flex;
+ flex-direction: column;
+ align-items: center;
+}
+
+form label{
+margin: 25px;
+font-size: 20px;
+text-align: center;
+}
+form label input, textarea{
+    display: block;
+    margin: 20px;
+    font-size: 15px;
+}
+
+form label textarea{
+ font-size: 20px;
+}
+
+
 `
