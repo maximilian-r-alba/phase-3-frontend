@@ -72,8 +72,16 @@ function BookPage({portalSite}){
     function editReview(reviewValues) {
         const reviewID = reviewValues.id
         const filteredReviews = reviews.filter((review) => review.id !== reviewID)
-        console.log(filteredReviews , reviewValues)
-        
+        const reviewsArrEdit = filteredReviews.concat([reviewValues])
+        setReviews(reviewsArrEdit)
+        calcRatingAfterEdit(reviewsArrEdit)
+    }
+
+    function calcRatingAfterEdit(editedReviewsArr){
+        const ratings = editedReviewsArr.map((review) => review.rating)
+        const average = ((ratings.reduce((sum, current) => sum + current))/(editedReviewsArr.length)).toFixed(2)
+ 
+        setBook({...book, rating: average})
     }
 
     return (
