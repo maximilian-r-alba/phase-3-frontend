@@ -72,7 +72,7 @@ function BookPage({portalSite}){
     function editReview(reviewValues) {
         const reviewID = reviewValues.id
         const filteredReviews = reviews.filter((review) => review.id !== reviewID)
-        const reviewsArrEdit = filteredReviews.concat([reviewValues])
+        const reviewsArrEdit = [reviewValues].concat(filteredReviews)
         setReviews(reviewsArrEdit)
         calcRatingAfterEdit(reviewsArrEdit)
     }
