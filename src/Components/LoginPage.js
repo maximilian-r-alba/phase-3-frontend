@@ -7,7 +7,7 @@ import styled from "styled-components"
 function LoginPage ({setUser , portalSite , setViewLoginForm}) {
 
 
-const [loginParameters, setLoginParameters] = useState({username: "rufusruf", password: "DfYTno"})
+const [loginParameters, setLoginParameters] = useState({username: "corinne", password: "LvLjhU"})
 const [isLoggedIn, setIsLoggedIn] = useState(false)
 const navigate = useNavigate()
 
