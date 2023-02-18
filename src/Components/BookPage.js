@@ -6,11 +6,10 @@ import { useParams } from "react-router-dom";
 import { UserContext } from "./UserContext";
 import { useContext } from "react";
 
-function BookPage({portalSite}){
+function BookPage({reviews , setReviews , portalSite , handleReviewChanges}){
 
     const {id} = useParams()
     const [book, setBook] = useState(undefined)
-    const [reviews, setReviews] = useState([])
     const [renderedReviews, setRenderedReviews] = useState(null)
     const [viewReviewForm, setViewReviewForm] = useState(false)
     
@@ -37,7 +36,7 @@ function BookPage({portalSite}){
 
     //maps reviewsArray with ReviewCard component
     function createReviewsList(reviewsArr){
-        const reviewList = reviewsArr.map((review) => <ReviewCard key={`reviewKey${review.id}`} review={review} handleViewForm={handleViewForm} setPassedReview={setPassedReview} handleReviewChanges={handleReviewChanges}></ReviewCard>)
+        const reviewList = reviewsArr.map((review) => <ReviewCard key={`reviewKey${review.id}`} review={review} handleViewForm={handleViewForm} setPassedReview={setPassedReview} handleReviewChanges={handler}></ReviewCard>)
         return reviewList
     }
     
@@ -48,38 +47,22 @@ function BookPage({portalSite}){
         setPassedReview(undefined)
     }
 
-    function handleReviewChanges(reviewValues , method){
-
-        const reviewID = reviewValues.id
-        const filteredReviews = reviews.filter((review) => review.id !== reviewID)
-        switch (method){
-
-            case 'post':
-                const reviewsArrEdit = [reviewValues, ...reviews]
-                setReviews(reviewsArrEdit)
-                calcRatingonPage(reviewsArrEdit)
-            break;
-
-            case 'patch':
-                const patchReviewArr = [reviewValues].concat(filteredReviews)
-                setReviews(patchReviewArr)
-                calcRatingonPage(patchReviewArr)
-            break;
-
-            case 'delete':
-                setReviews(filteredReviews)
-                calcRatingonPage(filteredReviews)
-            break;
-        }
+    function handler(data, method){
+        setReviews(handleReviewChanges(data, method))
+        calcRatingonPage(handleReviewChanges(data, method))
     }
-
-//calculate rating on front end state
-    function calcRatingonPage(editedReviewsArr){
-        const ratings = editedReviewsArr.map((review) => review.rating)
-        const average = ((ratings.reduce((sum, current) => sum + current))/(editedReviewsArr.length)).toFixed(2)
- 
-        setBook({...book, rating: average})
+    
+    //calculate rating on front end state
+function calcRatingonPage(editedReviewsArr){
+    const ratings = editedReviewsArr.map((review) => review.rating)
+    if(ratings.length>0){
+        const average = ((ratings.reduce((sum, current) => sum + current))/(ratings.length)).toFixed(2)
+    setBook({...book, rating: average})
     }
+    else{
+        setBook({...book, rating: undefined})
+    }
+}
 
     return (
         <>
@@ -102,7 +85,7 @@ function BookPage({portalSite}){
             
             : <p>Loading Book</p>}
 
-            {viewReviewForm ? createPortal(<ReviewForm review={passedReview} handleReviewChanges = {handleReviewChanges} handleViewForm = {handleViewForm} book_id = {book.id}/>, portalSite) : <></>}
+            {viewReviewForm ? createPortal(<ReviewForm review={passedReview} handleReviewChanges = {handler} handleViewForm = {handleViewForm} book_id = {book.id}/>, portalSite) : <></>}
         </>
        
     )

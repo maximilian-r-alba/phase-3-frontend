@@ -4,9 +4,9 @@ import { useContext } from "react";
 import { UserContext } from "./UserContext";
 import { createPortal } from "react-dom";
 import ReviewForm from "./ReviewForm";
-function ProfilePage({portalSite}){
+function ProfilePage({reviews , setReviews , handleReviewChanges , portalSite}){
 
-    const [reviews, setReviews] = useState([])
+    console.log(reviews)
     const user = useContext(UserContext)
     const [viewReviewForm, setViewReviewForm] = useState(false)
     const [passedReview, setPassedReview] = useState(undefined)
@@ -17,26 +17,14 @@ function ProfilePage({portalSite}){
             .then(data => setReviews(data))
     }, [])    
 
-    function handleReviewChanges(reviewValues , method){
 
-        const reviewID = reviewValues.id
-        const filteredReviews = reviews.filter((review) => review.id !== reviewID)
-        switch (method){
-
-            case 'patch':
-                const patchReviewArr = [reviewValues].concat(filteredReviews)
-                setReviews(patchReviewArr)
-            break;
-
-            case 'delete':
-                setReviews(filteredReviews)
-            break;
-        }
+    function handler(data, method){
+        setReviews(handleReviewChanges(data, method))
     }
 
 
     function renderReviews (reivewsArr) {
-        const renderedReviews = reivewsArr.map((review) => <ReviewCard key={`reviewKey${review.id}`} handleViewForm={handleViewForm} handleReviewChanges={handleReviewChanges} setPassedReview={setPassedReview} review={review} givenUser={true}/>)
+        const renderedReviews = reivewsArr.map((review) => <ReviewCard key={`reviewKey${review.id}`} handleViewForm={handleViewForm} handleReviewChanges={handler} setPassedReview={setPassedReview} review={review} givenUser={true}/>)
         return renderedReviews
     }
 
@@ -52,10 +40,10 @@ function ProfilePage({portalSite}){
             <img src={user.avatar_url} alt="user avatar"/>
             <p>{user.bio}</p>
             <ul>
-            {renderReviews(reviews)}
+            {reviews ? renderReviews(reviews) : <></>}
             </ul>
 
-            {viewReviewForm ? createPortal(<ReviewForm review={passedReview} handleReviewChanges={handleReviewChanges} handleViewForm = {handleViewForm} />, portalSite) : <></>}
+            {viewReviewForm ? createPortal(<ReviewForm review={passedReview} handleReviewChanges={handler} handleViewForm = {handleViewForm} />, portalSite) : <></>}
             
         </>
 
