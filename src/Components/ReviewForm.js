@@ -3,18 +3,19 @@ import { useEffect, useState } from "react"
 import { useContext } from "react"
 import { UserContext } from "./UserContext"
 
-function ReviewForm({ book_id , handleViewForm , postReview, review, patchReview}){
+function ReviewForm({ book_id , handleViewForm , handleReviewChanges, review, patchReview}){
 
     const user = useContext(UserContext)
     const [reviewValues, setReviewValues] = useState({user_id: user.id, book_id: book_id, title: "", rating: "", content: ""})
 
-
+//if a review is provided, i.e is being edited, then set form values
     useEffect(() => {
         if (review) {
             setReviewValues({id: review.id, user_id: review.user_id, book_id: review.book_id, title: review.title, rating: review.rating, content: review.content})
         }
     }, [])
 
+//update form values
     function updateFormValues(e){
         
         const key = e.target.name
@@ -32,6 +33,28 @@ function ReviewForm({ book_id , handleViewForm , postReview, review, patchReview
     
     }
 
+//post new reviews
+    function postReview(reviewValues){
+        fetch(`http://localhost:9292/reviews`, {
+            method: 'POST', 
+            headers:{'Content-Type': 'application/json'},
+            body:JSON.stringify(reviewValues)
+        })
+        .then(r=> r.json())
+        .then(data => handleReviewChanges(data, 'post'))
+    }
+// patch old reviews
+function patchReview(reviewValues){
+        
+    fetch(`http://localhost:9292/reviews/${reviewValues.id}`, {
+        method: 'PATCH', 
+        headers:{'Content-Type': 'application/json'},
+        body:JSON.stringify(reviewValues)
+    })
+    .then(r=> r.json())
+    .then(data => handleReviewChanges(data, 'patch'))
+
+}
    function handleSubmit(e){
     e.preventDefault()
     if(review){

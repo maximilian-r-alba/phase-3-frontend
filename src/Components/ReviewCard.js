@@ -4,12 +4,13 @@ import { UserContext } from "./UserContext";
 import ReviewForm from "./ReviewForm";
 import { createPortal } from "react-dom";
 
-function ReviewCard({review , givenUser , handleViewForm , setPassedReview}){
+function ReviewCard({review , givenUser , handleViewForm , setPassedReview , handleReviewChanges}){
     const [user, setUser] = useState(undefined)
     const loggedInUser = useContext(UserContext)
 
     const [book, setBook] = useState(undefined)
 
+//getuser datat for review cards
     useEffect(() => {
         if(givenUser) 
         {
@@ -23,6 +24,7 @@ function ReviewCard({review , givenUser , handleViewForm , setPassedReview}){
             }
     },[])
 
+//get book data; ****only needs name for when on profile page
     useEffect(() => {
         fetch(`http://localhost:9292/reviews/${review.id}/book`)
         .then(r => r.json())
@@ -34,12 +36,21 @@ function ReviewCard({review , givenUser , handleViewForm , setPassedReview}){
         setPassedReview(review)
     }
 
+    function handleDelete(){
+        fetch(`http://localhost:9292/reviews/${review.id}`, {
+            method: "DELETE"
+        })
+        .then(r => r.json())
+        .then(data => handleReviewChanges(data, 'delete'))
+    }
+
     return(
        <>
        {user ?
        <li>
             <div>
-                {loggedInUser.id === review.user_id ?<button name = "edit" onClick={handleEdit}>Edit</button> : <button>This does nothing</button>}
+                {loggedInUser.id === review.user_id ?<button name = "edit" onClick={handleEdit}>Edit</button> : <></>}
+                {loggedInUser.id === review.user_id ?<button name = "delete" onClick={handleDelete}>Delete</button> : <></>}
                 {givenUser && book ? <h1>{book.title}</h1> : <></>}
                 <h1>{review.title}</h1>
                 <p>{review.rating}</p>

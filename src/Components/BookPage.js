@@ -37,47 +37,44 @@ function BookPage({portalSite}){
 
     //maps reviewsArray with ReviewCard component
     function createReviewsList(reviewsArr){
-        const reviewList = reviewsArr.map((review) => <ReviewCard key={`reviewKey${review.id}`} review={review} handleViewForm={handleViewForm} setPassedReview={setPassedReview}></ReviewCard>)
+        const reviewList = reviewsArr.map((review) => <ReviewCard key={`reviewKey${review.id}`} review={review} handleViewForm={handleViewForm} setPassedReview={setPassedReview} handleReviewChanges={handleReviewChanges}></ReviewCard>)
         return reviewList
     }
     
     const [passedReview, setPassedReview] = useState(undefined)
+
     function handleViewForm(e){
         setViewReviewForm(viewReviewForm => !viewReviewForm)
         setPassedReview(undefined)
     }
 
-    function postReview(reviewValues){
-        fetch(`http://localhost:9292/reviews`, {
-            method: 'POST', 
-            headers:{'Content-Type': 'application/json'},
-            body:JSON.stringify(reviewValues)
-        })
-        .then(r=> r.json())
-        .then(data => setReviews([...reviews, data]))
-    }
+    function handleReviewChanges(reviewValues , method){
 
-    function patchReview(reviewValues){
-        
-        fetch(`http://localhost:9292/reviews/${reviewValues.id}`, {
-            method: 'PATCH', 
-            headers:{'Content-Type': 'application/json'},
-            body:JSON.stringify(reviewValues)
-        })
-        .then(r=> r.json())
-        .then(data => console.log(data))
-        editReview(reviewValues)
-    }
-
-    function editReview(reviewValues) {
         const reviewID = reviewValues.id
         const filteredReviews = reviews.filter((review) => review.id !== reviewID)
-        const reviewsArrEdit = [reviewValues].concat(filteredReviews)
-        setReviews(reviewsArrEdit)
-        calcRatingAfterEdit(reviewsArrEdit)
+        switch (method){
+
+            case 'post':
+                const reviewsArrEdit = [reviewValues, ...reviews]
+                setReviews(reviewsArrEdit)
+                calcRatingonPage(reviewsArrEdit)
+            break;
+
+            case 'patch':
+                const patchReviewArr = [reviewValues].concat(filteredReviews)
+                setReviews(patchReviewArr)
+                calcRatingonPage(patchReviewArr)
+            break;
+
+            case 'delete':
+                setReviews(filteredReviews)
+                calcRatingonPage(filteredReviews)
+            break;
+        }
     }
 
-    function calcRatingAfterEdit(editedReviewsArr){
+//calculate rating on front end state
+    function calcRatingonPage(editedReviewsArr){
         const ratings = editedReviewsArr.map((review) => review.rating)
         const average = ((ratings.reduce((sum, current) => sum + current))/(editedReviewsArr.length)).toFixed(2)
  
@@ -105,7 +102,7 @@ function BookPage({portalSite}){
             
             : <p>Loading Book</p>}
 
-            {viewReviewForm ? createPortal(<ReviewForm review={passedReview} postReview = {postReview} patchReview ={patchReview} handleViewForm = {handleViewForm} book_id = {book.id}/>, portalSite) : <></>}
+            {viewReviewForm ? createPortal(<ReviewForm review={passedReview} handleReviewChanges = {handleReviewChanges} handleViewForm = {handleViewForm} book_id = {book.id}/>, portalSite) : <></>}
         </>
        
     )
