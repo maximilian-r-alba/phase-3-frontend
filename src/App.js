@@ -26,9 +26,34 @@ function App() {
 
   const portalSite = document.getElementById('portalMount')
 
+  const [reviews, setReviews] = useState([])
+
   function handleViewForm (e) {
     setViewForm(!viewForm)
   }
+
+  function handleReviewChanges(reviewValues , method){
+
+    const reviewID = reviewValues.id
+    const filteredReviews = reviews.filter((review) => review.id !== reviewID)
+    switch (method){
+
+        case 'post':
+            const reviewsArrEdit = [reviewValues, ...reviews]
+  
+            return reviewsArrEdit;
+
+        case 'patch':
+            const patchReviewArr = [reviewValues].concat(filteredReviews)
+           
+            return patchReviewArr;
+
+        case 'delete':
+            // console.log(method , ' called')
+            
+            return filteredReviews;
+    }
+}
 
   return (
 
@@ -44,8 +69,10 @@ function App() {
       <Routes>
         <Route path="/" element = {<LandingPage user={user} />}/>
         <Route path="/books" element = {<BrowseBooksPage books = {books} setBooks={setBooks}/>}/>
-        <Route path="/books/:id" element = {<BookPage portalSite={portalSite}/>} />
-        <Route path="/profile" element = {<ProfilePage portalSite={portalSite} />}/>
+        <Route path="/books/:id" element = {<BookPage handleReviewChanges ={handleReviewChanges} reviews={reviews}
+        setReviews={setReviews} portalSite={portalSite}/>} />
+        <Route path="/profile"  element = {<ProfilePage reviews={reviews}
+        setReviews={setReviews} handleReviewChanges ={handleReviewChanges} portalSite={portalSite} />}/>
         {/* <Route path="/login" element = {<LoginPage portalSite={portalSite} setUser={setUser}></LoginPage>} /> */}
       </Routes>
 
