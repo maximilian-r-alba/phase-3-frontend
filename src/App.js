@@ -45,7 +45,7 @@ function App() {
         <Route path="/" element = {<LandingPage user={user} />}/>
         <Route path="/books" element = {<BrowseBooksPage books = {books} setBooks={setBooks}/>}/>
         <Route path="/books/:id" element = {<BookPage portalSite={portalSite}/>} />
-        <Route path="/profile" element = {<ProfilePage />}/>
+        <Route path="/profile" element = {<ProfilePage portalSite={portalSite} />}/>
         {/* <Route path="/login" element = {<LoginPage portalSite={portalSite} setUser={setUser}></LoginPage>} /> */}
       </Routes>
 
