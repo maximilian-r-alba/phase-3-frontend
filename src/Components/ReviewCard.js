@@ -10,6 +10,7 @@ function ReviewCard({review , givenUser , handleViewForm , setPassedReview , han
 
     const [book, setBook] = useState(undefined)
 
+    // console.log(handleReviewChanges)
 //getuser datat for review cards
     useEffect(() => {
         if(givenUser) 
