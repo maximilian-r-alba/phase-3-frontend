@@ -93,7 +93,7 @@ function BookPage({portalSite}){
             <p>{book.summary}</p>
             <p>Rating is {book.rating}</p>
 
-            {user ? <button onClick={handleViewForm}>Leave a Review</button> : <button>Login to Review</button>}
+            {user ? <button onClick={handleViewForm}>Leave a Review</button> : <button disabled>Login to Review</button>}
 
             <div>
                 {renderedReviews ? renderedReviews : <p>No reviews have been made</p>}
