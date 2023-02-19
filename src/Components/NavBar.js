@@ -1,17 +1,20 @@
 import { useContext } from "react";
 import { NavLink } from "react-router-dom";
 import { UserContext } from "./UserContext";
+import LoginPage from "./LoginPage";
 
-function NavBar ({setUser, setViewLoginForm}) {
+function NavBar ({setUser, viewForm , setViewForm , setForm}) {
 
     const user = useContext(UserContext)
 
     function handleLogout (e){
         setUser(false)
+        setViewForm(false)
     }
 
     function handleLogInForm(e){
-        setViewLoginForm(true)
+        setViewForm(!viewForm)
+        setForm(<LoginPage setUser={setUser} setViewForm={setViewForm}></LoginPage>)
     }
 
     return (

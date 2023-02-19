@@ -4,8 +4,7 @@ import { createPortal } from "react-dom"
 import styled from "styled-components"
 
 
-function LoginPage ({setUser , portalSite , setViewLoginForm}) {
-
+function LoginPage ({setUser  , setViewForm}) {
 
 const [loginParameters, setLoginParameters] = useState({username: "corinne", password: "LvLjhU"})
 const [isLoggedIn, setIsLoggedIn] = useState(false)
@@ -29,8 +28,6 @@ function handleOnSubmit (e) {
     }
 
      function authUserLogin (usersArray) {
-      
-      //potentially use .find method if you can gurantee no duplicate usernames in database
      
       const matchedUser = usersArray.filter((user) => user.username === loginParameters.username)[0]
 
@@ -39,13 +36,17 @@ function handleOnSubmit (e) {
       if (authPassword){
         setUser({name: matchedUser.name, avatar_url: matchedUser.avatar_url, id: matchedUser.id, bio: matchedUser.bio})
         setIsLoggedIn(true)
-        setViewLoginForm(false)
+        setViewForm(false)
       }
     }
+  function closeLogin(){
+    setViewForm(false)
+  }
 
 return (<>
-   {createPortal(<FormDiv>
+   <FormDiv>
         <p>Log In</p>
+        <button onClick={closeLogin}>X</button>
         <form onSubmit={handleOnSubmit}>
           <label>
             Username:
@@ -60,7 +61,7 @@ return (<>
           <input type="submit" value = "Log in"></input>
 
         </form>
-      </FormDiv>, portalSite)}
+      </FormDiv>
     {isLoggedIn ? navigate("/") : <></>}
 </>
 )

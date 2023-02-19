@@ -1,9 +1,9 @@
 import styled from "styled-components"
 import { useState } from "react"
-import { createPortal } from "react-dom"
 
-function BookForm({handleViewForm, setBooks , portalSite}){
+function BookForm({handleViewForm, setBooks}){
 
+    console.log(handleViewForm)
     const defaultFormValues = {title: "", author: "", summary:"", cover_url: "", subgenre: "", "fiction?":true }
     const [formValues, setFormValues] = useState(defaultFormValues)
 
@@ -24,14 +24,14 @@ function BookForm({handleViewForm, setBooks , portalSite}){
         })
         .then(r=>r.json())
         .then(data=>setBooks(books => [...books, data]))
+        handleViewForm()
     }
-
 
     
     return (<>
-        {createPortal(<div>
+        {<div>
             <StyledForm onSubmit={submitBook}>
-            <button onClick={handleViewForm}>X</button>
+           
             <label>
                 Title:
                 <input type="text" name="title" value = {formValues['title']} onChange={updateFormValues}/>
@@ -49,13 +49,12 @@ function BookForm({handleViewForm, setBooks , portalSite}){
                 Fiction
                 <input type="radio" name="fiction?" value = {true} defaultChecked onChange={updateFormValues}/>
             </label>
+
             <label className="fiction">
                 Nonfiction
                 <input type="radio" name="fiction?" value = {false} onChange={updateFormValues}/>
             </label>
-            {/* </div> */}
-            
-            
+                  
             <label>
                 Summary:
                 <textarea rows="8" cols="50" name="summary" value = {formValues['summary']} onChange={updateFormValues}/>
@@ -68,8 +67,8 @@ function BookForm({handleViewForm, setBooks , portalSite}){
             <input className="submitBtn" type="submit"/>
             
         </StyledForm>
-
-        </div>, portalSite)}
+        <button onClick={handleViewForm}>CLOSE FORM</button>
+        </div>}
         </>
     )
 }
@@ -77,7 +76,7 @@ function BookForm({handleViewForm, setBooks , portalSite}){
 export default BookForm
 
 const StyledForm = styled.form `
-position: fixed;
+/* position: fixed;
 top: 15vh;
 left: 35vw;
 border: solid;
@@ -118,6 +117,6 @@ label.fiction input{
 label input, textarea{
     display: block;
     margin: 20px;
-    font-size: 15px;
-}
+    font-size: 15px; */
+/* } */
 `
