@@ -4,17 +4,20 @@ import { useContext } from "react";
 import { UserContext } from "./UserContext";
 import { createPortal } from "react-dom";
 import ReviewForm from "./ReviewForm";
+
 function ProfilePage({reviews , setReviews , handleReviewChanges , portalSite}){
 
-    console.log(reviews)
+    
     const user = useContext(UserContext)
     const [viewReviewForm, setViewReviewForm] = useState(false)
     const [passedReview, setPassedReview] = useState(undefined)
-    
+   
+
     useEffect(() => {
-        fetch(`http://localhost:9292/users/${user.id}/reviews`)
+            fetch(`http://localhost:9292/users/${user.id}/reviews`)
             .then(r => r.json())
             .then(data => setReviews(data))
+        
     }, [])    
 
 
@@ -36,12 +39,12 @@ function ProfilePage({reviews , setReviews , handleReviewChanges , portalSite}){
 
     return(
         <>
-            <h1>{user.name}</h1>
+            {user ? <> <h1>{user.name}</h1>
             <img src={user.avatar_url} alt="user avatar"/>
             <p>{user.bio}</p>
             <ul>
             {reviews ? renderReviews(reviews) : <></>}
-            </ul>
+            </ul> </> : <></>}
 
             {viewReviewForm ? createPortal(<ReviewForm review={passedReview} handleReviewChanges={handler} handleViewForm = {handleViewForm} />, portalSite) : <></>}
             
