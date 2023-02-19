@@ -1,8 +1,8 @@
 
 import './App.css';
-// import ProfilePage from './Components/ProfilePage'
 import {useState, useEffect} from "react";
 import {Routes, Route} from "react-router-dom";
+import { createPortal } from 'react-dom';
 import LoginPage from './Components/LoginPage';
 import NavBar from './Components/NavBar';
 import LandingPage from './Components/LandingPage';
@@ -10,6 +10,7 @@ import BookForm from './Components/BookForm';
 import BrowseBooksPage from './Components/BrowseBooksPage';
 import ProfilePage from './Components/ProfilePage'
 import BookPage from './Components/BookPage';
+import FormContainer from './Components/FormContainer';
 
 import { UserContext } from './Components/UserContext';
 
@@ -21,15 +22,22 @@ function App() {
   const [user, setUser] = useState(false)
 
   const [viewForm, setViewForm] = useState(false)
-
-  const [viewLoginForm, setViewLoginForm] = useState(false)
+  const [form, setForm] = useState()
 
   const portalSite = document.getElementById('portalMount')
 
   const [reviews, setReviews] = useState([])
+  console.log(viewForm)
 
   function handleViewForm (e) {
-    setViewForm(!viewForm)
+    console.log('form called')
+    
+    setViewForm(viewForm => !viewForm)
+  }
+
+  function handleBookForm(){
+    handleViewForm()
+    setForm(<BookForm handleViewForm={handleViewForm} books={books} setBooks={setBooks}/>)
   }
 
   function handleReviewChanges(reviewValues , method){
@@ -40,17 +48,13 @@ function App() {
 
         case 'post':
             const reviewsArrEdit = [reviewValues, ...reviews]
-  
             return reviewsArrEdit;
 
         case 'patch':
             const patchReviewArr = [reviewValues].concat(filteredReviews)
-           
             return patchReviewArr;
 
         case 'delete':
-            // console.log(method , ' called')
-            
             return filteredReviews;
     }
 }
@@ -60,11 +64,9 @@ function App() {
     <>
     <h1>Do Robots Read About Electric Sheep</h1>
   <UserContext.Provider value = {user}>
-    <NavBar setViewLoginForm={setViewLoginForm} setUser = {setUser}></NavBar>
+    <NavBar viewForm={viewForm} setViewForm={setViewForm} setForm={setForm} setUser = {setUser}></NavBar>
 
-    {user ? <button onClick={handleViewForm}>Add Book</button> : <></>}
-    {viewForm ? <BookForm handleViewForm={handleViewForm} portalSite={portalSite} books={books} setBooks={setBooks}/> : <></>}
-    {viewLoginForm ? <LoginPage portalSite={portalSite} setUser={setUser} setViewLoginForm={setViewLoginForm}></LoginPage> : <></>}
+    {user ? <button onClick={handleBookForm}>Add Book</button> : <></>}
    
       <Routes>
         <Route path="/" element = {<LandingPage user={user} />}/>
@@ -77,7 +79,7 @@ function App() {
       </Routes>
 
     </UserContext.Provider>
-   
+    {viewForm ? createPortal(<FormContainer viewForm = {viewForm} form={form} />, portalSite) : <></>}
     </>
   );
 }
