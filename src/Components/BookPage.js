@@ -1,18 +1,20 @@
 import {useState, useEffect} from "react";
-import { createPortal } from "react-dom";
+import styled from "styled-components";
 import ReviewCard from './ReviewCard'
 import ReviewForm from "./ReviewForm";
 import { useParams } from "react-router-dom";
 import { UserContext } from "./UserContext";
 import { useContext } from "react";
+import StarsRating from "./StarsRating";
 
-function BookPage({reviews , setReviews , portalSite , handleReviewChanges}){
+function BookPage({reviews , setReviews , handleReviewChanges , handleFormContainer}){
 
     const {id} = useParams()
     const [book, setBook] = useState(undefined)
     const [renderedReviews, setRenderedReviews] = useState(null)
-    const [viewReviewForm, setViewReviewForm] = useState(false)
     
+    const [passedReview, setPassedReview] = useState(undefined)
+
     const user = useContext(UserContext)
 
     //get reviews for specified book
@@ -23,7 +25,7 @@ function BookPage({reviews , setReviews , portalSite , handleReviewChanges}){
     }, [])
     //render review cards for reviews when state changes by calling createReviewsList
     useEffect(() => {
-        setRenderedReviews(createReviewsList(reviews))
+        setRenderedReviews(createReviewsList([...reviews]))
     }, [reviews])
 
     //get specified book info
@@ -36,15 +38,15 @@ function BookPage({reviews , setReviews , portalSite , handleReviewChanges}){
 
     //maps reviewsArray with ReviewCard component
     function createReviewsList(reviewsArr){
-        const reviewList = reviewsArr.map((review) => <ReviewCard key={`reviewKey${review.id}`} review={review} handleViewForm={handleViewForm} setPassedReview={setPassedReview} handleReviewChanges={handler}></ReviewCard>)
+     
+        const reviewList = reviewsArr.map((review) => <ReviewCard key={`reviewKey${review.id}`} review={review} handleFormContainer={handleFormContainer} handleReviewChanges={handler}></ReviewCard>)
         return reviewList
     }
     
-    const [passedReview, setPassedReview] = useState(undefined)
+    
 
     function handleViewForm(e){
-        setViewReviewForm(viewReviewForm => !viewReviewForm)
-        setPassedReview(undefined)
+       handleFormContainer(true , <ReviewForm  handleReviewChanges = {handler} handleFormContainer= {handleFormContainer} book_id = {book.id}/>)
     }
 
     function handler(data, method){
@@ -52,6 +54,7 @@ function BookPage({reviews , setReviews , portalSite , handleReviewChanges}){
         calcRatingonPage(handleReviewChanges(data, method))
     }
     
+
     //calculate rating on front end state
 function calcRatingonPage(editedReviewsArr){
     const ratings = editedReviewsArr.map((review) => review.rating)
@@ -64,32 +67,75 @@ function calcRatingonPage(editedReviewsArr){
     }
 }
 
+
+
     return (
-        <>
+        <StyledDiv>
             {book ? 
             <> 
-            
-            <h1>{book.title}</h1>
             <img src={book.cover_url} alt="book cover image"></img>
-            <p>By: {book.author}</p>
-            <p>{book.subgenre}</p>
-            <p>{book.summary}</p>
-            <p>Rating is {book.rating}</p>
 
+        <div className="author">
+            <h1>{book.title}</h1>
+            <p >By: {book.author}</p>
+            <div>
+            <StarsRating key={book.rating} givenRating={book.rating} /> 
+            <p style={{display:'inline'}}>{` ${book.rating} `}({reviews.length})</p>
+            </div>
+        </div>
+            {/* <p>{book.subgenre}</p> */}
+            <p>{book.summary}</p>
             {user ? <button onClick={handleViewForm}>Leave a Review</button> : <button disabled>Login to Review</button>}
 
-            <div>
+            <div className="reviews">
                 {renderedReviews ? renderedReviews : <p>No reviews have been made</p>}
             </div>
             </> 
             
             : <p>Loading Book</p>}
 
-            {viewReviewForm ? createPortal(<ReviewForm review={passedReview} handleReviewChanges = {handler} handleViewForm = {handleViewForm} book_id = {book.id}/>, portalSite) : <></>}
-        </>
+        </StyledDiv>
        
     )
 }
 
 export default BookPage
 
+const StyledDiv = styled.div`
+display: grid;
+/* grid-template-columns: 15vw 350px 20px auto 100px 15vw;
+  grid-template-rows: 150px 30px 30px 30px 40px 30px 36vh 55px 55px 33vh; */
+  grid-template-columns: 1fr 1fr 4fr 1fr;
+  grid-template-rows: 1fr 1fr 1fr 5fr 1fr auto;
+  grid-gap: 20px;
+
+  grid-template-areas: 
+  "space space space space"
+  "leftsidebar image header rightsidebar"
+  "leftsidebar image header rightsidebar"
+  "leftsidebar image summary rightsidebar"
+  "leftsidebar reviewBtn summary rightsidebar"
+  'leftsidebar review review rightsidebar'
+  
+  ;
+
+div.author{
+    grid-area: header;
+}
+div.reviews{
+    grid-area: review;
+}
+
+img{ 
+  grid-area:image;
+  width: 350px;
+  height: 100%;
+}
+p{
+    grid-area:summary;
+}
+
+button{
+    grid-area: reviewBtn;
+}
+`

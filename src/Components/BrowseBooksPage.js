@@ -2,14 +2,12 @@ import './BooksCard'
 import BooksCard from './BooksCard'
 import styled from 'styled-components'
 import {useState , useEffect} from 'react'
-import { createPortal } from 'react-dom'
-import { NavLink } from "react-router-dom";
 
 function BrowseBooksPage({books , setBooks}){
 
     const [renderedCards, setRenderedCards] = useState(createBookCards(books))
 
-    const [viewTitle, setViewTitle] = useState("Books")
+    const [viewTitle, setViewTitle] = useState("Alphabetical")
 
     useEffect(() => {
         fetch("http://localhost:9292/books")
@@ -18,7 +16,7 @@ function BrowseBooksPage({books , setBooks}){
       }, [])
 
       useEffect(() => {
-        setViewTitle("Books")
+        setViewTitle("Alphabetical")
         setRenderedCards(createBookCards(books))
       }, [books])
 
@@ -29,9 +27,9 @@ function BrowseBooksPage({books , setBooks}){
     }
 
     function handleSort(e){
-        const fictionValue = e.target.value
-        setViewTitle(fictionValue)
-        switch (fictionValue) {
+        const sortValue = e.target.value
+        setViewTitle(sortValue)
+        switch (sortValue) {
             case "Fiction":
                 fetch("http://localhost:9292/books/genre/fiction")
                     .then(r => r.json())
@@ -50,7 +48,7 @@ function BrowseBooksPage({books , setBooks}){
                     .then(data => setRenderedCards(createBookCards(data)))
                 break;
 
-            case "Books":
+            case "Alphabetical":
                 fetch("http://localhost:9292/books")
                     .then(r => r.json())
                     .then(data => setRenderedCards(createBookCards(data)))
@@ -61,12 +59,14 @@ function BrowseBooksPage({books , setBooks}){
 
     return(
     <>
-    <form>
-        <input type = "button" value = "Books" onClick={handleSort}></input>
-        <input type = "button" value = "Fiction" onClick={handleSort}></input>
-        <input type = "button" value = "Non-Fiction" onClick={handleSort}></input>
-        <input type = "button" value = "Author" onClick={handleSort}></input>
-    </form>
+    {/* make it clearer that these are filters */}
+    <FilterHeader>Filter By:</FilterHeader>
+    <StyledSort>
+        <button type = "button" value = "Alphabetical" onClick={handleSort}>Alphabetical</button>
+        <button type = "button" value = "Fiction" onClick={handleSort}>Fiction</button>
+        <button type = "button" value = "Non-Fiction" onClick={handleSort}>Non-Fiction</button>
+        <button type = "button" value = "Author" onClick={handleSort}>Author</button>
+    </StyledSort>
    <h1>{viewTitle}</h1>
     <Container>
         {/* {filtered} */}
@@ -85,4 +85,22 @@ const Container = styled.div`
     flex-wrap:wrap;
     justify-content: space-evenly;
     gap: 30px;
+`
+const FilterHeader = styled.p`
+text-align: center;
+font-size: 25px;
+`
+
+const StyledSort = styled.div`
+display: flex;
+justify-content: center;
+gap: 20px;
+button{
+    background: none;
+    border: none;
+    font-size: 18px;
+    font-family: 'Courier New', Courier, monospace;
+    cursor: pointer;
+}
+
 `
