@@ -1,14 +1,14 @@
 import {useState} from "react"
 import { useNavigate } from "react-router-dom"
-import { createPortal } from "react-dom"
 import styled from "styled-components"
+import {FaWindowClose} from "react-icons/fa"
 
+function LoginPage ({setUser  , handleFormContainer}) {
 
-function LoginPage ({setUser  , setViewForm}) {
-
-const [loginParameters, setLoginParameters] = useState({username: "corinne", password: "LvLjhU"})
+const [loginParameters, setLoginParameters] = useState({username: "brande", password: "yfoG"})
 const [isLoggedIn, setIsLoggedIn] = useState(false)
 const navigate = useNavigate()
+
 
 function handleChange (e) {
       const key = e.target.name
@@ -36,17 +36,15 @@ function handleOnSubmit (e) {
       if (authPassword){
         setUser({name: matchedUser.name, avatar_url: matchedUser.avatar_url, id: matchedUser.id, bio: matchedUser.bio})
         setIsLoggedIn(true)
-        setViewForm(false)
+        handleFormContainer(false)
       }
     }
-  function closeLogin(){
-    setViewForm(false)
-  }
 
 return (<>
    <FormDiv>
+   <button onClick={(e) => handleFormContainer(false)}><FaWindowClose size={20} /></button>
         <p>Log In</p>
-        <button onClick={closeLogin}>X</button>
+        
         <form onSubmit={handleOnSubmit}>
           <label>
             Username:
@@ -58,7 +56,7 @@ return (<>
           <input type="password" name="password" value={loginParameters["password"]} onChange={handleChange}></input>
           </label>
 
-          <input type="submit" value = "Log in"></input>
+          <input className='submitBtn' type="submit" value = "Log in"></input>
 
         </form>
       </FormDiv>
@@ -70,12 +68,42 @@ return (<>
 export default LoginPage;
 
 const FormDiv = styled.div `
-position: fixed;
-top: 15vh;
-left: 25vw;
-border: solid;
-height: 10vh;
-width: 50vw;
-opacity: 1;
-background-color: white;
+button{
+  color: red;
+  background: none;
+  border: none;
+  cursor: pointer;
+  margin-top: 10px;
+  
+}
+p{
+  font-size: 30px;
+  text-align: center;
+}
+form{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+label{
+  font-size: 20px;
+  width: 200px;
+}
+
+input{
+  margin-left: 10px;
+}
+
+input.submitBtn{
+  align-self: left;
+  width: 100px;
+  height: 30px;
+  font-size: 25px;
+  background: none;
+  border: none;
+  text-decoration: underline;
+  cursor: pointer;
+}
 `

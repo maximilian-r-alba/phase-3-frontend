@@ -1,9 +1,10 @@
 import styled from "styled-components"
 import { useState } from "react"
+import {FaWindowClose} from "react-icons/fa"
 
-function BookForm({handleViewForm, setBooks}){
+function BookForm({handleFormContainer, setBooks}){
 
-    console.log(handleViewForm)
+    
     const defaultFormValues = {title: "", author: "", summary:"", cover_url: "", subgenre: "", "fiction?":true }
     const [formValues, setFormValues] = useState(defaultFormValues)
 
@@ -24,14 +25,15 @@ function BookForm({handleViewForm, setBooks}){
         })
         .then(r=>r.json())
         .then(data=>setBooks(books => [...books, data]))
-        handleViewForm()
+        handleFormContainer(false)
     }
 
-    
-    return (<>
-        {<div>
+    return (
+      
             <StyledForm onSubmit={submitBook}>
-           
+           <button onClick={(e) => {
+                e.preventDefault();
+                handleFormContainer(false)}}><FaWindowClose size={20}/></button>
             <label>
                 Title:
                 <input type="text" name="title" value = {formValues['title']} onChange={updateFormValues}/>
@@ -67,56 +69,50 @@ function BookForm({handleViewForm, setBooks}){
             <input className="submitBtn" type="submit"/>
             
         </StyledForm>
-        <button onClick={handleViewForm}>CLOSE FORM</button>
-        </div>}
-        </>
+
+        
     )
 }
 
 export default BookForm
 
 const StyledForm = styled.form `
-/* position: fixed;
-top: 15vh;
-left: 35vw;
-border: solid;
-height: 70vh;
-width: 30vw;
-opacity: 1;
-background-color: white;
 
 display: flex;
 flex-direction: column;
-align-items: center;
+gap: 20px;
 
-input.submitBtn{
-    position: relative;
-    bottom: 6vh;
-    left: 8vw;
-}
-
-label.bookCoverLabel{
-    position: relative;
-    right: 8vw;
-}
-
-label.bookCoverLabel input{
-    position: relative;
-    bottom:2vh;
+button{
+    color: red;
+    width: 30px;
+    background: none;
+    border: none;
+    margin-top: 10px;
+    cursor: pointer;
+    
 }
 
 label{
-font-size: 20px;
-text-align: center;
+    margin-left: 20px;
+    font-size: 20px;
+    input{
+        font-size: 15px;
+        outline: none;
+        margin-left: 10px;
+        border-style: none none dotted none;
+    }
 }
-
-label.fiction input{
-    display: inline-block;
-}
-
-label input, textarea{
+textarea{
     display: block;
-    margin: 20px;
-    font-size: 15px; */
-/* } */
+}
+input.submitBtn{
+  align-self: center;
+  width: 100px;
+  height: 30px;
+  font-size: 25px;
+  background: none;
+  border: none;
+  text-decoration: underline;
+  cursor: pointer;
+}
 `
