@@ -20,5 +20,6 @@ left: 35vw;
 border: solid;
 height: 70vh;
 width: 30vw;
-opacity: 1;
-background-color: white;`
+background: white
+
+`
