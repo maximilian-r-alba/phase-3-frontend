@@ -18,6 +18,9 @@ function ReviewCard({review , inUserPage , handleFormContainer ,  handleReviewCh
         if(inUserPage) 
         {
             setUser(loggedInUser)
+            fetch(`http://localhost:9292/reviews/${review.id}/book`)
+            .then(r => r.json())
+            .then(data => setBook(data))
         }
             else
                 {
@@ -25,12 +28,6 @@ function ReviewCard({review , inUserPage , handleFormContainer ,  handleReviewCh
                     .then(r => r.json())
                     .then(data => setUser(data))
                 }
-    },[])
-
-    useEffect(() => {
-        fetch(`http://localhost:9292/reviews/${review.id}/book`)
-        .then(r => r.json())
-        .then(data => setBook(data))
     },[])
 
     function handleEdit(){
@@ -73,10 +70,15 @@ function ReviewCard({review , inUserPage , handleFormContainer ,  handleReviewCh
             
             <div className="review">
                 {inUserPage && book ? <h1>{book.title}</h1> : <></>}
+
                 <h1>{review.title}</h1>
+
                 <StarsRating key ={review.rating} givenRating={review.rating}/>
+
                 <pre>{review.content}</pre>
+
                 {loggedInUser.id === review.user_id ?<EditButton name = "edit" onClick={handleEdit}><BsPencilSquare size={20} /></EditButton> : <></>}
+                
                 {loggedInUser.id === review.user_id ?<DeleteButton name = "delete" onClick={handleDelete}><BsTrash size={20} /></DeleteButton> : <></>}
             </div>
                 
@@ -146,8 +148,6 @@ cursor: pointer;
 position: absolute;
 right: 2%;
 top: 5%;
-/* bottom: 130px;
-left: 830px; */
 `
 
 const EditButton = styled.button`
@@ -155,9 +155,6 @@ border: none;
 background-color: transparent;
 cursor: pointer;
 position: absolute;
-/* right: 2%; */
 right: 7%;
 top: 5%; 
-/* bottom: 130px;
-left: 830px; */
 `
