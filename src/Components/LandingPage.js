@@ -9,7 +9,9 @@ function LandingPage ({books , setBooks}) {
    const [cards, setCards] = useState(undefined)
 
    useEffect(() => {
-    fetch(`http://localhost:9292/books/toprated`).then(r => r.json()).then(data => setBooks(data))
+    fetch(`http://localhost:9292/books/toprated`)
+    .then(r => r.json())
+    .then(data => setBooks(data))
    }, [])
 
    useEffect(() => {
