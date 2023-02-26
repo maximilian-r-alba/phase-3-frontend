@@ -2,7 +2,7 @@ import { useState } from "react"
 import Gear from "./Gear"
 import styled from "styled-components"
 
-function StarsRating({updateFormValues=null , givenRating=1}){
+function StarsRating({updateFormValues=null , givenRating=0}){
    
 
     const [rating, setRating] = useState(givenRating)
