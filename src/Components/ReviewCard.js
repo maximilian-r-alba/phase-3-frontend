@@ -15,12 +15,12 @@ function ReviewCard({review , inUserPage , handleFormContainer ,  handleReviewCh
     const [book, setBook] = useState(undefined)
 
     useEffect(() => {
+        fetch(`http://localhost:9292/reviews/${review.id}/book`)
+        .then(r => r.json())
+        .then(data => setBook(data))
         if(inUserPage) 
         {
             setUser(loggedInUser)
-            fetch(`http://localhost:9292/reviews/${review.id}/book`)
-            .then(r => r.json())
-            .then(data => setBook(data))
         }
             else
                 {
@@ -28,6 +28,12 @@ function ReviewCard({review , inUserPage , handleFormContainer ,  handleReviewCh
                     .then(r => r.json())
                     .then(data => setUser(data))
                 }
+    },[])
+
+    useEffect(() => {
+        fetch(`http://localhost:9292/reviews/${review.id}/book`)
+        .then(r => r.json())
+        .then(data => setBook(data))
     },[])
 
     function handleEdit(){
@@ -61,7 +67,7 @@ function ReviewCard({review , inUserPage , handleFormContainer ,  handleReviewCh
              
             <div className="book">
                 <Link to={`/books/${book.id}`}>
-                    <img src={book.cover_url} alt = "book cover" />
+                    <img src={`${book.cover_url}?random=${Math.floor(Math.random() * 50)}`} alt = "book cover" />
                     <p>Go to book</p>
                 </Link> 
             </div>
