@@ -59,19 +59,20 @@ function BrowseBooksPage({books , setBooks}){
 
     return(
     <>
-    {/* make it clearer that these are filters */}
-    <FilterHeader>Filter By:</FilterHeader>
-    <StyledSort>
-        <button type = "button" value = "Alphabetical" onClick={handleSort}>Alphabetical</button>
-        <button type = "button" value = "Fiction" onClick={handleSort}>Fiction</button>
-        <button type = "button" value = "Non-Fiction" onClick={handleSort}>Non-Fiction</button>
-        <button type = "button" value = "Author" onClick={handleSort}>Author</button>
-    </StyledSort>
-   <h1>{viewTitle}</h1>
-    <Container>
-        {/* {filtered} */}
-        {renderedCards}
-    </Container>
+        <FilterHeader>Filter By:</FilterHeader>
+
+        <StyledSort>
+            <button type = "button" value = "Alphabetical" onClick={handleSort}>Alphabetical</button>
+            <button type = "button" value = "Fiction" onClick={handleSort}>Fiction</button>
+            <button type = "button" value = "Non-Fiction" onClick={handleSort}>Non-Fiction</button>
+            <button type = "button" value = "Author" onClick={handleSort}>Author</button>
+        </StyledSort>
+
+        <h1>{viewTitle}</h1>
+    
+        <Container>
+            {renderedCards}
+        </Container>
     </>
 
         

@@ -12,39 +12,31 @@ function BookPage({reviews , setReviews , handleReviewChanges , handleFormContai
     const {id} = useParams()
     const [book, setBook] = useState(undefined)
     const [renderedReviews, setRenderedReviews] = useState(null)
-    
-    const [passedReview, setPassedReview] = useState(undefined)
+
 
     const user = useContext(UserContext)
 
-    //get reviews for specified book
     useEffect(() => {
         fetch(`http://localhost:9292/books/${id}/reviews`)
         .then(r => r.json())
         .then(data => setReviews(data))
     }, [])
-    //render review cards for reviews when state changes by calling createReviewsList
+   
     useEffect(() => {
         setRenderedReviews(createReviewsList([...reviews]))
     }, [reviews])
 
-    //get specified book info
     useEffect(() => {
         fetch(`http://localhost:9292/books/${id}`)
         .then(r => r.json())
         .then(data => setBook(data))
     }, [])
    
-
-    //maps reviewsArray with ReviewCard component
     function createReviewsList(reviewsArr){
-     
         const reviewList = reviewsArr.map((review) => <ReviewCard key={`reviewKey${review.id}`} review={review} handleFormContainer={handleFormContainer} handleReviewChanges={handler}></ReviewCard>)
         return reviewList
     }
     
-    
-
     function handleViewForm(e){
        handleFormContainer(true , <ReviewForm  handleReviewChanges = {handler} handleFormContainer= {handleFormContainer} book_id = {book.id}/>)
     }
@@ -54,20 +46,16 @@ function BookPage({reviews , setReviews , handleReviewChanges , handleFormContai
         calcRatingonPage(handleReviewChanges(data, method))
     }
     
-
-    //calculate rating on front end state
-function calcRatingonPage(editedReviewsArr){
-    const ratings = editedReviewsArr.map((review) => review.rating)
-    if(ratings.length>0){
-        const average = ((ratings.reduce((sum, current) => sum + current))/(ratings.length)).toFixed(2)
-    setBook({...book, rating: average})
+    function calcRatingonPage(editedReviewsArr){
+        const ratings = editedReviewsArr.map((review) => review.rating)
+        if(ratings.length>0){
+            const average = ((ratings.reduce((sum, current) => sum + current))/(ratings.length)).toFixed(2)
+        setBook({...book, rating: average})
+        }
+        else{
+            setBook({...book, rating: undefined})
+        }
     }
-    else{
-        setBook({...book, rating: undefined})
-    }
-}
-
-
 
     return (
         <StyledDiv>
@@ -75,15 +63,15 @@ function calcRatingonPage(editedReviewsArr){
             <> 
             <img src={book.cover_url} alt="book cover image"></img>
 
-        <div className="author">
-            <h1>{book.title}</h1>
-            <p >By: {book.author}</p>
-            <div>
-            <StarsRating key={book.rating} givenRating={book.rating} /> 
-            <p style={{display:'inline'}}>{` ${book.rating} `}({reviews.length})</p>
+            <div className="author">
+                <h1>{book.title}</h1>
+                <p >By: {book.author}</p>
+                <div>
+                <StarsRating key={book.rating} givenRating={book.rating} /> 
+                <p style={{display:'inline'}}>{` ${book.rating} `}({reviews.length})</p>
+                </div>
             </div>
-        </div>
-            {/* <p>{book.subgenre}</p> */}
+
             <p>{book.summary}</p>
             {user ? <button onClick={handleViewForm}>Leave a Review</button> : <button disabled>Login to Review</button>}
 
@@ -103,8 +91,7 @@ export default BookPage
 
 const StyledDiv = styled.div`
 display: grid;
-/* grid-template-columns: 15vw 350px 20px auto 100px 15vw;
-  grid-template-rows: 150px 30px 30px 30px 40px 30px 36vh 55px 55px 33vh; */
+
   grid-template-columns: 1fr 1fr 4fr 1fr;
   grid-template-rows: 1fr 1fr 1fr 5fr 1fr auto;
   grid-gap: 20px;

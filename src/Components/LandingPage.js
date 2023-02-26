@@ -31,12 +31,9 @@ function LandingPage ({books , setBooks}) {
                 {cards} 
             </TopTenContainer>
         </div>
-       
         : <></>}
        </LandingContainer>
     )
-
-   
 }
 
 export default LandingPage

@@ -8,28 +8,25 @@ import { BsTrash } from "react-icons/bs";
 import { BsPencilSquare } from "react-icons/bs";
 import { Link } from "react-router-dom";
 
-function ReviewCard({review , givenUser , handleFormContainer ,  handleReviewChanges}){
+function ReviewCard({review , inUserPage , handleFormContainer ,  handleReviewChanges}){
     const [user, setUser] = useState(undefined)
     const loggedInUser = useContext(UserContext)
     
     const [book, setBook] = useState(undefined)
 
-
-//getuser datat for review cards
     useEffect(() => {
-        if(givenUser) 
+        if(inUserPage) 
         {
             setUser(loggedInUser)
         }
             else
-            {
-                fetch(`http://localhost:9292/users/${review.user_id}`)
-                .then(r => r.json())
-                .then(data => setUser(data))
-            }
+                {
+                    fetch(`http://localhost:9292/users/${review.user_id}`)
+                    .then(r => r.json())
+                    .then(data => setUser(data))
+                }
     },[])
 
-//get book data; ****only needs name for when on profile page
     useEffect(() => {
         fetch(`http://localhost:9292/reviews/${review.id}/book`)
         .then(r => r.json())
@@ -55,7 +52,7 @@ function ReviewCard({review , givenUser , handleFormContainer ,  handleReviewCha
        <li style={{"list-style-type": "none"}}>
             <StyledDiv>
             
-            {!givenUser ? 
+            {!inUserPage ? 
             
             <div className="user">
                 <p>{user.name}</p>
@@ -71,15 +68,11 @@ function ReviewCard({review , givenUser , handleFormContainer ,  handleReviewCha
                     <p>Go to book</p>
                 </Link> 
             </div>
+                : <p>Loading</p>}
+            </>}
             
-                        : <p>Loading</p>}
-            </>
-            }
-            
-            
-
             <div className="review">
-                {givenUser && book ? <h1>{book.title}</h1> : <></>}
+                {inUserPage && book ? <h1>{book.title}</h1> : <></>}
                 <h1>{review.title}</h1>
                 <StarsRating key ={review.rating} givenRating={review.rating}/>
                 <pre>{review.content}</pre>

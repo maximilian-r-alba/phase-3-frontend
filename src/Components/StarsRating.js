@@ -1,4 +1,4 @@
-import { useState , useEffect} from "react"
+import { useState } from "react"
 import Gear from "./Gear"
 import styled from "styled-components"
 
@@ -22,11 +22,9 @@ function StarsRating({updateFormValues=null , givenRating=1}){
     }
    
     return (
-        <StyledLabel >
+        <StyledLabel>
             {ratingArr}
         </StyledLabel>
-        
-       
     )
 }
 

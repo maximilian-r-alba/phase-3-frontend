@@ -7,8 +7,7 @@ import styled from "styled-components";
 function NavBar ({setUser , handleFormContainer}) {
 
     const user = useContext(UserContext)
-
-    //user avatar still shows missing on logout
+    
     function handleLogout (e){
         setUser(false)
         handleFormContainer(false)

@@ -29,7 +29,7 @@ function ProfilePage({reviews , setReviews , handleReviewChanges , handleFormCon
 
 
     function renderReviews (reivewsArr) {
-        const renderedReviews = reivewsArr.map((review) => <ReviewCard key={`reviewKey${review.id}`} handleViewForm={handleViewForm} handleFormContainer={handleFormContainer} handleReviewChanges={handler} setPassedReview={setPassedReview} review={review} givenUser={true}/>)
+        const renderedReviews = reivewsArr.map((review) => <ReviewCard key={`reviewKey${review.id}`} handleViewForm={handleViewForm} handleFormContainer={handleFormContainer} handleReviewChanges={handler} setPassedReview={setPassedReview} review={review} inUserPage={true}/>)
         return renderedReviews
     }
 

@@ -3,21 +3,19 @@ import { useEffect, useState } from "react"
 import { useContext } from "react"
 import { UserContext } from "./UserContext"
 import StarsRating from "./StarsRating"
+import { FaWindowClose } from "react-icons/fa"
 
 function ReviewForm({ book_id , handleFormContainer , handleReviewChanges, review = null, patchReview}){
 
     const user = useContext(UserContext)
     const [reviewValues, setReviewValues] = useState({user_id: user.id, book_id: book_id, title: "", rating: 1, content: ""})
     
-
-//if a review is provided, i.e is being edited, then set form values
     useEffect(() => {
         if (review) {
             setReviewValues({id: review.id, user_id: review.user_id, book_id: review.book_id, title: review.title, rating: review.rating, content: review.content})
         }
     }, [])
 
-//update form values
     function updateFormValues(e){
         const key = e.target.name
         if(key == "rating")
@@ -30,11 +28,8 @@ function ReviewForm({ book_id , handleFormContainer , handleReviewChanges, revie
             const value = e.target.value    
             setReviewValues({...reviewValues, [key]: value})
         }
- 
-    
     }
 
-//post new reviews
     function postReview(reviewValues){
         fetch(`http://localhost:9292/reviews`, {
             method: 'POST', 
@@ -44,18 +39,19 @@ function ReviewForm({ book_id , handleFormContainer , handleReviewChanges, revie
         .then(r=> r.json())
         .then(data => handleReviewChanges(data, 'post'))
     }
-// patch old reviews
-function patchReview(reviewValues){
-        
-    fetch(`http://localhost:9292/reviews/${reviewValues.id}`, {
-        method: 'PATCH', 
-        headers:{'Content-Type': 'application/json'},
-        body:JSON.stringify(reviewValues)
-    })
-    .then(r=> r.json())
-    .then(data => handleReviewChanges(data, 'patch'))
 
-}
+    function patchReview(reviewValues){
+            
+        fetch(`http://localhost:9292/reviews/${reviewValues.id}`, {
+            method: 'PATCH', 
+            headers:{'Content-Type': 'application/json'},
+            body:JSON.stringify(reviewValues)
+        })
+        .then(r=> r.json())
+        .then(data => handleReviewChanges(data, 'patch'))
+
+    }
+
    function handleSubmit(e){
     e.preventDefault()
     if(review){
@@ -69,29 +65,29 @@ function patchReview(reviewValues){
    }
 
     return (
-        // <StyledDiv>
             <StyledForm onSubmit={handleSubmit}>
-            <button onClick={(e) => handleFormContainer(false)}>X</button>
-            <label className="title">
-                <h1>Title:</h1>
-                <input type="text" name="title" value={reviewValues.title} onChange={updateFormValues}/>
-            </label>
-            <label className="rating">
-            <h1>Rating:</h1>
-            {review ? <StarsRating updateFormValues= {updateFormValues} givenRating={review.rating}/> : <StarsRating updateFormValues={updateFormValues} />}
-            
-            </label>
-            
-            
-            <label className="review">
-                <h1>Review:</h1>
-                <textarea type="text" name="content" value={reviewValues.content} onChange={updateFormValues} rows="10" cols="40"/>
-            </label>
-            <label className="submit">
-                <input type="submit"/>
-            </label>
+                <button className="close" onClick={(e) => handleFormContainer(false)}><FaWindowClose size={20}/></button>
+
+                <label className="title">
+                    <h1>Title:</h1>
+                    <input type="text" name="title" value={reviewValues.title} onChange={updateFormValues}/>
+                </label>
+
+                <label className="rating">
+                    <h1>Rating:</h1>
+                    {review ? <StarsRating updateFormValues= {updateFormValues} givenRating={review.rating}/> : <StarsRating updateFormValues={updateFormValues} />}
+                </label>
+                
+                
+                <label className="review">
+                    <h1>Review:</h1>
+                    <textarea type="text" name="content" value={reviewValues.content} onChange={updateFormValues} rows="10" cols="40"/>
+                </label>
+
+                <label className="submit">
+                    <input type="submit"/>
+                </label>
             </StyledForm>
-        // </StyledDiv>
     )
 }
 
@@ -104,7 +100,7 @@ display: grid;
 grid-template-columns: repeat(4,25%);
 grid-template-rows: 1fr 1fr 1fr 3fr 1fr;
 grid-template-areas: 
-". . . close"
+"close . . . "
 ". title title ."
 ". rating rating ."
 ". review review ."
@@ -116,13 +112,16 @@ h1{
         font-size: 25px;
     }
 
-button{
+button.close{
+    color: red;
+    width: 30px;
+    background: none;
+    border: none;
     position: relative;
-    left: 70%;
-    top: 10%;
-    width: 20%;
-    height: 20%;
+    bottom: 30px;
+    cursor: pointer;
     grid-area: close;
+    
 }
 .title{
     grid-area: title;

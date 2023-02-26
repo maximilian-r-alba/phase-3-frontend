@@ -1,6 +1,6 @@
 import styled from "styled-components"
 import { useState } from "react"
-import {FaWindowClose} from "react-icons/fa"
+import { FaWindowClose } from "react-icons/fa"
 
 function BookForm({handleFormContainer, setBooks}){
 
@@ -30,18 +30,22 @@ function BookForm({handleFormContainer, setBooks}){
 
     return (
       
-            <StyledForm onSubmit={submitBook}>
-           <button onClick={(e) => {
-                e.preventDefault();
-                handleFormContainer(false)}}><FaWindowClose size={20}/></button>
+        <StyledForm onSubmit={submitBook}>
+
+           <button onClick={(e) => {e.preventDefault(); handleFormContainer(false)}}>
+                <FaWindowClose size={20}/>
+            </button>
+
             <label>
                 Title:
                 <input type="text" name="title" value = {formValues['title']} onChange={updateFormValues}/>
             </label>
+
             <label>
                 Author:
                 <input type="text" name="author" value = {formValues['author']} onChange={updateFormValues}/>
             </label>
+
             <label>
                 Genre:
                 <input type="text" name="subgenre" value = {formValues['subgenre']} onChange={updateFormValues}/>
@@ -61,6 +65,7 @@ function BookForm({handleFormContainer, setBooks}){
                 Summary:
                 <textarea rows="8" cols="50" name="summary" value = {formValues['summary']} onChange={updateFormValues}/>
             </label>
+
             <label className="bookCoverLabel">
                 Book Cover URL:
                 <input type="text" name="cover_url" value = {formValues['cover_url']} onChange={updateFormValues}/>
@@ -69,8 +74,6 @@ function BookForm({handleFormContainer, setBooks}){
             <input className="submitBtn" type="submit"/>
             
         </StyledForm>
-
-        
     )
 }
 
