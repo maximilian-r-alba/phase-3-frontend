@@ -1,19 +1,13 @@
-import {useState , useEffect} from "react";
+import { useEffect , useContext} from "react";
 import ReviewCard from "./ReviewCard";
-import { useContext } from "react";
 import { UserContext } from "./UserContext";
-import { createPortal } from "react-dom";
 import styled from "styled-components";
-import ReviewForm from "./ReviewForm";
+
 
 function ProfilePage({reviews , setReviews , handleReviewChanges , handleFormContainer}){
 
     
     const user = useContext(UserContext)
- 
-    const [viewReviewForm, setViewReviewForm] = useState(false)
-    const [passedReview, setPassedReview] = useState(undefined)
-   
 
     useEffect(() => {
             fetch(`http://localhost:9292/users/${user.id}/reviews`)
@@ -29,31 +23,17 @@ function ProfilePage({reviews , setReviews , handleReviewChanges , handleFormCon
 
 
     function renderReviews (reivewsArr) {
-        const renderedReviews = reivewsArr.map((review) => <ReviewCard key={`reviewKey${review.id}`} handleViewForm={handleViewForm} handleFormContainer={handleFormContainer} handleReviewChanges={handler} setPassedReview={setPassedReview} review={review} inUserPage={true}/>)
+        const renderedReviews = reivewsArr.map((review) => <ReviewCard key={`reviewKey${review.id}`} handleFormContainer={handleFormContainer} handleReviewChanges={handler} review={review} inUserPage={true}/>)
         return renderedReviews
-    }
-
-
-    function handleViewForm(e){
-        setViewReviewForm(viewReviewForm => !viewReviewForm)
-        setPassedReview(undefined)
     }
 
     return(
         <StyledDiv>
 
-            <img className="avatar" src={user.avatar_url} alt="user avatar"/>
+            {user ? <> <img className="avatar" src={user.avatar_url} alt="user avatar"/>
 
-            <div>
-                
-            </div>
-            {user ? <> 
-            
                 <h1>{user.name}</h1>
                 <p>{user.bio}</p>
-            
-            
-            
             <ul>
             {reviews ? renderReviews(reviews) : <></>}
             </ul> </> : <></>}
