@@ -20,28 +20,26 @@ function BookPage({reviews , setReviews , handleReviewChanges , handleFormContai
         fetch(`http://localhost:9292/books/${id}/reviews`)
         .then(r => r.json())
         .then(data => setReviews(data))
+
+        fetch(`http://localhost:9292/books/${id}`)
+        .then(r => r.json())
+        .then(data => setBook(data))
     }, [])
    
     useEffect(() => {
         setRenderedReviews(createReviewsList([...reviews]))
     }, [reviews])
 
-    useEffect(() => {
-        fetch(`http://localhost:9292/books/${id}`)
-        .then(r => r.json())
-        .then(data => setBook(data))
-    }, [])
-   
     function createReviewsList(reviewsArr){
-        const reviewList = reviewsArr.map((review) => <ReviewCard key={`reviewKey${review.id}`} review={review} handleFormContainer={handleFormContainer} handleReviewChanges={handler}></ReviewCard>)
+        const reviewList = reviewsArr.map((review) => <ReviewCard key={`reviewKey${review.id}`} review={review} handleFormContainer={handleFormContainer} handleReviewChanges={pageHandler}></ReviewCard>)
         return reviewList
     }
-    
-    function handleViewForm(e){
-       handleFormContainer(true , <ReviewForm  handleReviewChanges = {handler} handleFormContainer= {handleFormContainer} book_id = {book.id}/>)
+   
+    function showReviewForm(){
+       handleFormContainer(true , <ReviewForm  handleReviewChanges = {pageHandler} handleFormContainer= {handleFormContainer} book_id = {book.id}/>)
     }
 
-    function handler(data, method){
+    function pageHandler(data, method){
         setReviews(handleReviewChanges(data, method))
         calcRatingonPage(handleReviewChanges(data, method))
     }
@@ -68,12 +66,12 @@ function BookPage({reviews , setReviews , handleReviewChanges , handleFormContai
                 <p >By: {book.author}</p>
                 <div>
                 <StarsRating key={book.rating} givenRating={book.rating} /> 
-                <p style={{display:'inline'}}>{` ${book.rating} `}({reviews.length})</p>
+                {book.rating ? <p style={{display:'inline'}}>{` ${book.rating} `}({reviews.length})</p> : <p style={{display:'inline'}}>{` unrated`}({reviews.length})</p>}
                 </div>
             </div>
 
             <p>{book.summary}</p>
-            {user ? <button onClick={handleViewForm}>Leave a Review</button> : <button disabled>Login to Review</button>}
+            {user ? <button onClick={showReviewForm}>Leave a Review</button> : <button disabled>Login to Review</button>}
 
             <div className="reviews">
                 {renderedReviews ? renderedReviews : <p>No reviews have been made</p>}
