@@ -1,8 +1,8 @@
 import { useEffect , useContext} from "react";
-import ReviewCard from "./ReviewCard";
 import { UserContext } from "./UserContext";
 import styled from "styled-components";
 
+import ReviewCard from "./ReviewCard";
 
 function ProfilePage({reviews , setReviews , handleReviewChanges , handleFormContainer}){
 

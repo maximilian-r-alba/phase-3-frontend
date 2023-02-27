@@ -1,8 +1,9 @@
+import { useState , useEffect , useContext } from "react"
 import { UserContext } from "./UserContext"
-import { useContext } from "react"
-import { useState , useEffect } from "react"
-import BooksCard from "./BooksCard"
 import styled from "styled-components"
+
+import BooksCard from "./BooksCard"
+
 
 function LandingPage ({books , setBooks}) {
    const user = useContext(UserContext) 

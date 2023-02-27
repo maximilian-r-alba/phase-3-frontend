@@ -1,12 +1,11 @@
-import { useEffect , useState } from "react"
-import { useContext } from "react";
-import { UserContext } from "./UserContext";
+import { useEffect , useState , useContext} from "react"
 import styled from "styled-components";
+import { BsTrash , BsPencilSquare } from "react-icons/bs";
+import { Link } from "react-router-dom";
+
+import { UserContext } from "./UserContext";
 import StarsRating from "./StarsRating";
 import ReviewForm from "./ReviewForm";
-import { BsTrash } from "react-icons/bs";
-import { BsPencilSquare } from "react-icons/bs";
-import { Link } from "react-router-dom";
 
 function ReviewCard({review , inUserPage , handleFormContainer ,  handleReviewChanges}){
     const [user, setUser] = useState(undefined)

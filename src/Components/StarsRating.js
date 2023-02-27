@@ -1,10 +1,10 @@
 import { useState } from "react"
-import Gear from "./Gear"
 import styled from "styled-components"
+
+import Gear from "./Gear"
 
 function StarsRating({updateFormValues=null , givenRating=0}){
    
-
     const [rating, setRating] = useState(givenRating)
     
     const ratingArr = [1,2,3,4,5].map((value) => 
