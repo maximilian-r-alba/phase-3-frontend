@@ -30,11 +30,13 @@ function handleOnSubmit (e) {
      function authUserLogin (usersArray) {
      
       const matchedUser = usersArray.filter((user) => user.username === loginParameters.username)[0]
-
+      
       const authPassword = matchedUser.password === loginParameters.password
       
       if (authPassword){
-        setUser({name: matchedUser.name, avatar_url: matchedUser.avatar_url, id: matchedUser.id, bio: matchedUser.bio})
+        fetch(`http://localhost:9292/users/${matchedUser.id}`)
+        .then(r => r.json())
+        .then(data => setUser(data))
         setIsLoggedIn(true)
         handleFormContainer(false)
       }

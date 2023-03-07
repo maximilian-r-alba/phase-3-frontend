@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink , useNavigate} from "react-router-dom";
 import { UserContext } from "./UserContext";
 import LoginPage from "./LoginPage";
 import styled from "styled-components";
@@ -7,10 +7,12 @@ import styled from "styled-components";
 function NavBar ({setUser , handleFormContainer}) {
 
     const user = useContext(UserContext)
-    
-    function handleLogout (e){
+    const navigate = useNavigate()
+
+    function handleLogout (){
         setUser(false)
         handleFormContainer(false)
+        navigate("/")
     }
 
     function handleLogInForm(e){
