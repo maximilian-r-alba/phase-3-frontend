@@ -7,37 +7,23 @@ import { UserContext } from "./UserContext";
 import StarsRating from "./StarsRating";
 import ReviewForm from "./ReviewForm";
 
-function ReviewCard({review , inUserPage , handleFormContainer ,  handleReviewChanges}){
-    const [user, setUser] = useState(undefined)
+function ReviewCard({book, review , inUserPage , handleFormContainer ,  handleReviewChanges}){
+    
+    const [user, setUser] = useState()
     const loggedInUser = useContext(UserContext)
     
-    const [book, setBook] = useState(undefined)
-
     useEffect(() => {
-        fetch(`http://localhost:9292/reviews/${review.id}/book`)
-        .then(r => r.json())
-        .then(data => setBook(data))
-        if(inUserPage) 
-        {
+        if(!inUserPage){
+            setUser(review.user)
+        }
+        else{
             setUser(loggedInUser)
         }
-            else
-                {
-                    fetch(`http://localhost:9292/users/${review.user_id}`)
-                    .then(r => r.json())
-                    .then(data => setUser(data))
-                }
-    },[])
+    }, [])
 
-    useEffect(() => {
-        fetch(`http://localhost:9292/reviews/${review.id}/book`)
-        .then(r => r.json())
-        .then(data => setBook(data))
-    },[])
-
+   
     function handleEdit(){
-        handleFormContainer(true,<ReviewForm  handleReviewChanges = {handleReviewChanges} handleFormContainer= {handleFormContainer} book_id = {book.id} review={review}/> )
-       
+        handleFormContainer(true,<ReviewForm  handleReviewChanges = {handleReviewChanges} handleFormContainer= {handleFormContainer} book_id = {book.id} review={review}/> )   
     }
 
     function handleDelete(){
@@ -51,7 +37,7 @@ function ReviewCard({review , inUserPage , handleFormContainer ,  handleReviewCh
     return(
        <>
        {user ?
-       <li style={{"list-style-type": "none"}}>
+       <li style={{"listStyleType": "none"}}>
             <StyledDiv>
             
             {!inUserPage ? 
@@ -82,9 +68,9 @@ function ReviewCard({review , inUserPage , handleFormContainer ,  handleReviewCh
 
                 <pre>{review.content}</pre>
 
-                {loggedInUser.id === review.user_id ?<EditButton name = "edit" onClick={handleEdit}><BsPencilSquare size={20} /></EditButton> : <></>}
+                {loggedInUser.id === user.id ?<EditButton name = "edit" onClick={handleEdit}><BsPencilSquare size={20} /></EditButton> : <></>}
                 
-                {loggedInUser.id === review.user_id ?<DeleteButton name = "delete" onClick={handleDelete}><BsTrash size={20} /></DeleteButton> : <></>}
+                {loggedInUser.id === user.id ?<DeleteButton name = "delete" onClick={handleDelete}><BsTrash size={20} /></DeleteButton> : <></>}
             </div>
                 
         </StyledDiv>

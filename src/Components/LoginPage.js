@@ -13,7 +13,6 @@ const navigate = useNavigate()
 function handleChange (e) {
       const key = e.target.name
       const value = e.target.value
-    
       setLoginParameters({...loginParameters, [key]: value})
     }
     
@@ -29,7 +28,7 @@ function handleOnSubmit (e) {
 
      function authUserLogin (usersArray) {
      
-      const matchedUser = usersArray.filter((user) => user.username === loginParameters.username)[0]
+      const matchedUser = usersArray.find((user) => user.username === loginParameters.username)
       
       const authPassword = matchedUser.password === loginParameters.password
       
@@ -44,7 +43,7 @@ function handleOnSubmit (e) {
 
 return (<>
    <FormDiv>
-   <button onClick={(e) => handleFormContainer(false)}><FaWindowClose size={20} /></button>
+   <button onClick={() => handleFormContainer(false)}><FaWindowClose size={20} /></button>
         <p>Log In</p>
         
         <form onSubmit={handleOnSubmit}>

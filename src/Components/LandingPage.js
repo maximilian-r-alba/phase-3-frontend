@@ -1,13 +1,10 @@
-import { useState , useEffect , useContext } from "react"
+import { useEffect , useContext } from "react"
 import { UserContext } from "./UserContext"
 import styled from "styled-components"
 
-import BooksCard from "./BooksCard"
 
-
-function LandingPage ({books , setBooks}) {
+function LandingPage ({books , setBooks , createBookCards}) {
    const user = useContext(UserContext) 
-   const [cards, setCards] = useState(undefined)
 
    useEffect(() => {
     fetch(`http://localhost:9292/books/toprated`)
@@ -15,23 +12,14 @@ function LandingPage ({books , setBooks}) {
     .then(data => setBooks(data))
    }, [])
 
-   useEffect(() => {
-    setCards(createCards(books))
-   }, [books])
-
-   function createCards (bookArr) {
-
-     return (bookArr.map((book) => <BooksCard key={book.id} book={book} />))
-   }
-
     return(
         <LandingContainer>
         {user ? <h1>WELCOME {user.name}</h1> : <h1>Welcome</h1>}
-        {cards ? 
+        {books ? 
         <div>
             <h1>Top Ten Books</h1>
             <TopTenContainer>
-                {cards} 
+                {createBookCards(books)} 
             </TopTenContainer>
         </div>
         : <></>}

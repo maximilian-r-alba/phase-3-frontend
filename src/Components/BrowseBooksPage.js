@@ -1,9 +1,8 @@
 import './BooksCard'
-import BooksCard from './BooksCard'
 import styled from 'styled-components'
 import {useState , useEffect} from 'react'
 
-function BrowseBooksPage({books , setBooks}){
+function BrowseBooksPage({books , setBooks , createBookCards}){
 
     const [renderedCards, setRenderedCards] = useState(createBookCards(books))
 
@@ -19,12 +18,6 @@ function BrowseBooksPage({books , setBooks}){
         setViewTitle("Alphabetical")
         setRenderedCards(createBookCards(books))
       }, [books])
-
-
-
-    function createBookCards(bookArr){
-        return bookArr.map((book) => <BooksCard key = {book.id} book={book} />)
-    }
 
     function handleSort(e){
         const sortValue = e.target.value
@@ -53,7 +46,6 @@ function BrowseBooksPage({books , setBooks}){
                     .then(r => r.json())
                     .then(data => setRenderedCards(createBookCards(data)))
                 break;
-
         }
     }
 
@@ -74,7 +66,6 @@ function BrowseBooksPage({books , setBooks}){
             {renderedCards}
         </Container>
     </>
-
         
     )
 }

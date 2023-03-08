@@ -5,9 +5,10 @@ import { FaWindowClose } from "react-icons/fa"
 
 import StarsRating from "./StarsRating"
 
-function ReviewForm({ book_id , handleFormContainer , handleReviewChanges, review = null, patchReview}){
+function ReviewForm({ book_id , handleFormContainer , handleReviewChanges, review = null}){
 
     const user = useContext(UserContext)
+    
     const [reviewValues, setReviewValues] = useState({user_id: user.id, book_id: book_id, title: "", rating: 1, content: ""})
     
     useEffect(() => {
@@ -37,18 +38,25 @@ function ReviewForm({ book_id , handleFormContainer , handleReviewChanges, revie
             body:JSON.stringify(reviewValues)
         })
         .then(r=> r.json())
-        .then(data => handleReviewChanges(data, 'post'))
+        .then(data => {
+            data['user'] = user
+            handleReviewChanges(data, 'post')
+        })
     }
 
     function patchReview(reviewValues){
-            
+        console.log(reviewValues)
         fetch(`http://localhost:9292/reviews/${reviewValues.id}`, {
             method: 'PATCH', 
             headers:{'Content-Type': 'application/json'},
             body:JSON.stringify(reviewValues)
         })
         .then(r=> r.json())
-        .then(data => handleReviewChanges(data, 'patch'))
+        .then(data => {
+            data['book'] = review.book
+            data['user'] = user
+            handleReviewChanges(data, 'patch')
+        })
 
     }
 

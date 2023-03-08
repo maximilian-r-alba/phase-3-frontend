@@ -3,50 +3,40 @@ import styled from "styled-components";
 import { useParams } from "react-router-dom";
 import StarsRating from "./StarsRating";
 
-import ReviewCard from './ReviewCard'
 import ReviewForm from "./ReviewForm";
 import { UserContext } from "./UserContext";
 
 
-function BookPage({reviews , setReviews , handleReviewChanges , handleFormContainer}){
+function BookPage({reviews , setReviews , handleReviewChanges , handleFormContainer , createReviewCards}){
 
     const {id} = useParams()
     const [book, setBook] = useState(undefined)
-    const [renderedReviews, setRenderedReviews] = useState(null)
-
-
+    
     const user = useContext(UserContext)
-
+    
     useEffect(() => {
-        fetch(`http://localhost:9292/books/${id}/reviews`)
+     
+        fetch(`http://localhost:9292/reviews/book/${id}`)
         .then(r => r.json())
-        .then(data => setReviews(data))
-
-        fetch(`http://localhost:9292/books/${id}`)
-        .then(r => r.json())
-        .then(data => setBook(data))
+        .then(data => {
+            setBook(data)
+            setReviews(data.reviews)
+        })
     }, [])
-   
+
     useEffect(() => {
-        setRenderedReviews(createReviewsList([...reviews]))
+        if(reviews){
+            calcBookrating(reviews)
+        }
     }, [reviews])
 
-    function createReviewsList(reviewsArr){
-        const reviewList = reviewsArr.map((review) => <ReviewCard key={`reviewKey${review.id}`} review={review} handleFormContainer={handleFormContainer} handleReviewChanges={pageHandler}></ReviewCard>)
-        return reviewList
-    }
-   
     function showReviewForm(){
-       handleFormContainer(true , <ReviewForm  handleReviewChanges = {pageHandler} handleFormContainer= {handleFormContainer} book_id = {book.id}/>)
+       handleFormContainer(true , <ReviewForm  handleReviewChanges = {handleReviewChanges} handleFormContainer= {handleFormContainer} book_id = {book.id}/>)
     }
 
-    function pageHandler(data, method){
-        setReviews(handleReviewChanges(data, method))
-        calcRatingonPage(handleReviewChanges(data, method))
-    }
     
-    function calcRatingonPage(editedReviewsArr){
-        const ratings = editedReviewsArr.map((review) => review.rating)
+    function calcBookrating(reviews){
+        const ratings = reviews.map((review) => review.rating)
         if(ratings.length>0){
             const average = ((ratings.reduce((sum, current) => sum + current))/(ratings.length)).toFixed(2)
         setBook({...book, rating: average})
@@ -75,7 +65,7 @@ function BookPage({reviews , setReviews , handleReviewChanges , handleFormContai
             {user ? <button onClick={showReviewForm}>Leave a Review</button> : <button disabled>Login to Review</button>}
 
             <div className="reviews">
-                {renderedReviews ? renderedReviews : <p>No reviews have been made</p>}
+                {reviews ? createReviewCards(reviews, book) : <p>No reviews have been made</p>}
             </div>
             </> 
             

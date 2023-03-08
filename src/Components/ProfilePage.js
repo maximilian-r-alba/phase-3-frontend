@@ -2,30 +2,26 @@ import { useEffect , useContext} from "react";
 import { UserContext } from "./UserContext";
 import styled from "styled-components";
 
-import ReviewCard from "./ReviewCard";
 
-function ProfilePage({reviews , setReviews , handleReviewChanges , handleFormContainer}){
+function ProfilePage({reviews , setReviews , setUser , createReviewCards}){
 
-    
     const user = useContext(UserContext)
+    
+    useEffect(()=>{
+        fetch(`http://localhost:9292/users/${user.id}`)
+        .then(r => r.json())
+        .then(data => setUser(data))
+    },[])
+
 
     useEffect(() => {
-            fetch(`http://localhost:9292/users/${user.id}/reviews`)
-            .then(r => r.json())
-            .then(data => setReviews(data))
-        
-    }, [])    
+        const userReviews = user.reviews.map((review) =>{
+            review['user'] = user
+            return review
+        })
+        setReviews(userReviews)
+    },[user])
 
-
-    function handler(data, method){
-        setReviews(handleReviewChanges(data, method))
-    }
-
-
-    function renderReviews (reivewsArr) {
-        const renderedReviews = reivewsArr.map((review) => <ReviewCard key={`reviewKey${review.id}`} handleFormContainer={handleFormContainer} handleReviewChanges={handler} review={review} inUserPage={true}/>)
-        return renderedReviews
-    }
 
     return(
         <StyledDiv>
@@ -35,7 +31,7 @@ function ProfilePage({reviews , setReviews , handleReviewChanges , handleFormCon
                 <h1>{user.name}</h1>
                 <p>{user.bio}</p>
             <ul>
-            {reviews ? renderReviews(reviews) : <></>}
+            {reviews ? createReviewCards(reviews, false, true) : <></>}
             </ul> </> : <></>}
 
         </StyledDiv>

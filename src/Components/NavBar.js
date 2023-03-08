@@ -15,7 +15,7 @@ function NavBar ({setUser , handleFormContainer}) {
         navigate("/")
     }
 
-    function handleLogInForm(e){
+    function handleLogInForm(){
         handleFormContainer(true, <LoginPage setUser={setUser} handleFormContainer={handleFormContainer}></LoginPage> )
     }
 

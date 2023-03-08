@@ -11,10 +11,12 @@ import ProfilePage from './Components/ProfilePage'
 import BookPage from './Components/BookPage';
 import FormContainer from './Components/FormContainer';
 import { UserContext } from './Components/UserContext';
+import ReviewCard from "./Components/ReviewCard";
+import BooksCard from "./Components/BooksCard";
 
 function App() {
   
-  const [books, setBooks] = useState([])
+  const [books, setBooks] = useState(undefined)
 
   const [user, setUser] = useState(false)
 
@@ -24,33 +26,52 @@ function App() {
   const portalSite = document.getElementById('portalSite')
   const overlayGrab = document.getElementById('overlayDiv')
 
-  const [reviews, setReviews] = useState([])
+  const [reviews, setReviews] = useState(undefined)
  
+  function createReviewCards(reviewsArray , book , inUserPage = false){
+
+    if(inUserPage){
+      const reviewList = reviewsArray.map((review) => <ReviewCard key={`reviewKey${review.id}`} book={review.book} review={review} handleFormContainer={handleFormContainer} handleReviewChanges={handleReviewChanges} inUserPage={inUserPage}></ReviewCard>)
+      return reviewList
+    }
+    else{
+      const reviewList = reviewsArray.map((review) => <ReviewCard key={`reviewKey${review.id}`} book={book} review={review} handleFormContainer={handleFormContainer} handleReviewChanges={handleReviewChanges}></ReviewCard>)
+    return reviewList
+    }
+}
+
+function createBookCards(bookArr){
+  return bookArr.map((book) => <BooksCard key = {book.id} book={book} />)
+}
+
   function handleFormContainer(viewBool=false, formComponent=null){
     setViewForm(viewBool)
     setForm(formComponent)
 }
 
   function handleBookForm(){
-    handleFormContainer(true, <BookForm handleFormContainer={handleFormContainer} books={books} setBooks={setBooks}/>)
+    handleFormContainer(true, <BookForm handleFormContainer={handleFormContainer} setBooks={setBooks}/>)
   }
 
   function handleReviewChanges(reviewValues , method){
-
     const reviewID = reviewValues.id
     const filteredReviews = reviews.filter((review) => review.id !== reviewID)
+    
     switch (method){
 
         case 'post':
             const reviewsArrEdit = [reviewValues, ...reviews]
-            return reviewsArrEdit;
+            setReviews(reviewsArrEdit)
+            break;
 
         case 'patch':
             const patchReviewArr = [reviewValues].concat(filteredReviews)
-            return patchReviewArr;
+            setReviews(patchReviewArr)
+            break;
 
         case 'delete':
-            return filteredReviews;
+          setReviews(filteredReviews)
+          break;
     }
 }
 
@@ -66,19 +87,19 @@ function App() {
         {user ? <AddBookButton onClick={handleBookForm}>Add A Book</AddBookButton> : <></>}
 
         <Routes>
-          <Route path="/" element = {<LandingPage books={books} setBooks={setBooks}/>}/>
+          <Route path="/" element = {<LandingPage books={books} setBooks={setBooks} createBookCards={createBookCards}/>}/>
 
-          <Route path="/books" element = {<BrowseBooksPage books = {books} setBooks={setBooks}/>}/>
+          <Route path="/books" element = {<BrowseBooksPage books = {books} setBooks={setBooks} createBookCards={createBookCards}/>}/>
 
-          <Route path="/books/:id" element = {<BookPage handleReviewChanges ={handleReviewChanges} reviews={reviews}
-          setReviews={setReviews} handleFormContainer={handleFormContainer} portalSite={portalSite}/>} />
+          <Route path="/books/:id" element = {<BookPage  reviews={reviews}
+          setReviews={setReviews} handleReviewChanges ={handleReviewChanges} handleFormContainer={handleFormContainer} createReviewCards={createReviewCards}/>} />
 
           <Route path="/profile"  element = {<ProfilePage reviews={reviews}
-          setReviews={setReviews} handleReviewChanges ={handleReviewChanges} handleFormContainer={handleFormContainer} portalSite={portalSite} />}/>
+          setReviews={setReviews} setUser={setUser} handleReviewChanges ={handleReviewChanges} handleFormContainer={handleFormContainer} portalSite={portalSite} createReviewCards={createReviewCards} />}/>
 
         </Routes>
         
-        {viewForm ? createPortal(<FormContainer viewForm = {viewForm} form={form} />, portalSite) : <></>}
+        {viewForm ? createPortal(<FormContainer  form={form} />, portalSite) : <></>}
         {viewForm ? createPortal(<OverlayDiv active={viewForm}></OverlayDiv>, overlayGrab) : <></>}
         
     </UserContext.Provider>

@@ -1,10 +1,10 @@
 import styled from "styled-components"
 
-function FormContainer ({viewForm , form}) {
+function FormContainer ({form}) {
     return (
         <>
         <StyledDiv >
-            {viewForm ? form : <></>}
+            {form ? form : <></>}
         </StyledDiv>
             
         </>

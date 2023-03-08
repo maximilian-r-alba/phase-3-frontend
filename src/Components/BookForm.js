@@ -24,7 +24,7 @@ function BookForm({handleFormContainer, setBooks}){
             body: JSON.stringify(formValues)
         })
         .then(r=>r.json())
-        .then(data=>setBooks(books => [...books, data]))
+        .then(data=>setBooks(books => [data, ...books]))
         handleFormContainer(false)
     }
 
