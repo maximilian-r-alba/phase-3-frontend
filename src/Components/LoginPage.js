@@ -5,7 +5,7 @@ import {FaWindowClose} from "react-icons/fa"
 
 function LoginPage ({setUser  , handleFormContainer}) {
 
-const [loginParameters, setLoginParameters] = useState({username: "leann_ca", password: "vSDjxp"})
+const [loginParameters, setLoginParameters] = useState({username: "devora", password: "iPrcsE"})
 const [isLoggedIn, setIsLoggedIn] = useState(false)
 const navigate = useNavigate()
 
