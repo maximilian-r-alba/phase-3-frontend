@@ -16,7 +16,7 @@ import BooksCard from "./Components/BooksCard";
 
 function App() {
   
-  const [books, setBooks] = useState(undefined)
+  const [books, setBooks] = useState([])
 
   const [user, setUser] = useState(false)
 
@@ -82,7 +82,7 @@ function createBookCards(bookArr){
         {user ? <AddBookButton onClick={handleBookForm}>Add A Book</AddBookButton> : <></>}
 
         <Routes>
-          <Route path="/" element = {<LandingPage books={books} setBooks={setBooks} createBookCards={createBookCards}/>}/>
+          <Route path="/" element = {<LandingPage createBookCards={createBookCards}/>}/>
 
           <Route path="/books" element = {<BrowseBooksPage books = {books} setBooks={setBooks} createBookCards={createBookCards}/>}/>
 
