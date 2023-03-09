@@ -31,7 +31,7 @@ function ProfilePage({reviews , setReviews , setUser , createReviewCards}){
                 <h1>{user.name}</h1>
                 <p>{user.bio}</p>
             <ul>
-            {reviews ? createReviewCards(reviews, false, true) : <></>}
+            {reviews ? createReviewCards(reviews, true) : <></>}
             </ul> </> : <></>}
 
         </StyledDiv>

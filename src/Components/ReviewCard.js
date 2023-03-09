@@ -7,26 +7,19 @@ import { UserContext } from "./UserContext";
 import StarsRating from "./StarsRating";
 import ReviewForm from "./ReviewForm";
 
-function ReviewCard({book, review , inUserPage , handleFormContainer ,  handleReviewChanges}){
+function ReviewCard({ review , inUserPage , handleFormContainer ,  handleReviewChanges}){
     
-    const [user, setUser] = useState()
+    const user = review.user
     const loggedInUser = useContext(UserContext)
-    
-    useEffect(() => {
-        if(!inUserPage){
-            setUser(review.user)
-        }
-        else{
-            setUser(loggedInUser)
-        }
-    }, [])
+    const book = review.book
+   
 
    
-    function handleEdit(){
+    function editReview(){
         handleFormContainer(true,<ReviewForm  handleReviewChanges = {handleReviewChanges} handleFormContainer= {handleFormContainer} book_id = {book.id} review={review}/> )   
     }
 
-    function handleDelete(){
+    function deleteReview(){
         fetch(`http://localhost:9292/reviews/${review.id}`, {
             method: "DELETE"
         })
@@ -68,9 +61,9 @@ function ReviewCard({book, review , inUserPage , handleFormContainer ,  handleRe
 
                 <pre>{review.content}</pre>
 
-                {loggedInUser.id === user.id ?<EditButton name = "edit" onClick={handleEdit}><BsPencilSquare size={20} /></EditButton> : <></>}
+                {loggedInUser.id === user.id ?<EditButton name = "edit" onClick={editReview}><BsPencilSquare size={20} /></EditButton> : <></>}
                 
-                {loggedInUser.id === user.id ?<DeleteButton name = "delete" onClick={handleDelete}><BsTrash size={20} /></DeleteButton> : <></>}
+                {loggedInUser.id === user.id ?<DeleteButton name = "delete" onClick={deleteReview}><BsTrash size={20} /></DeleteButton> : <></>}
             </div>
                 
         </StyledDiv>
