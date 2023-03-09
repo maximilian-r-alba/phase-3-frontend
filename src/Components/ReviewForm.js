@@ -40,12 +40,12 @@ function ReviewForm({ book_id , handleFormContainer , handleReviewChanges, revie
         .then(r=> r.json())
         .then(data => {
             data['user'] = user
+            data['book'] = {id: book_id}
             handleReviewChanges(data, 'post')
         })
     }
 
     function patchReview(reviewValues){
-        console.log(reviewValues)
         fetch(`http://localhost:9292/reviews/${reviewValues.id}`, {
             method: 'PATCH', 
             headers:{'Content-Type': 'application/json'},
