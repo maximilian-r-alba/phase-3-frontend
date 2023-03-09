@@ -11,13 +11,15 @@ function BrowseBooksPage({books , setBooks , createBookCards}){
     useEffect(() => {
         fetch("http://localhost:9292/books")
           .then(r => r.json())
-          .then(data => setBooks(data))
+          .then(data => {
+            setBooks(data)
+        })
       }, [])
 
       useEffect(() => {
-        setViewTitle("Alphabetical")
         setRenderedCards(createBookCards(books))
-      }, [books])
+      },[books])
+
 
     function handleSort(e){
         const sortValue = e.target.value
