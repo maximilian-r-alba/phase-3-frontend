@@ -19,11 +19,12 @@ function BookPage({reviews , setReviews , handleReviewChanges , handleFormContai
         fetch(`http://localhost:9292/reviews/book/${id}`)
         .then(r => r.json())
         .then(data => {
-            setBook(data)
-            setReviews(data.reviews)
+            setReviews(data)
+            setBook(data[0]['book'])
         })
     }, [])
 
+    
     useEffect(() => {
         if(reviews){
             calcBookrating(reviews)
@@ -65,7 +66,7 @@ function BookPage({reviews , setReviews , handleReviewChanges , handleFormContai
             {user ? <button onClick={showReviewForm}>Leave a Review</button> : <button disabled>Login to Review</button>}
 
             <div className="reviews">
-                {reviews ? createReviewCards(reviews, book) : <p>No reviews have been made</p>}
+                {reviews ? createReviewCards(reviews) : <p>No reviews have been made</p>}
             </div>
             </> 
             
