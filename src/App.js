@@ -28,16 +28,11 @@ function App() {
 
   const [reviews, setReviews] = useState(undefined)
  
-  function createReviewCards(reviewsArray , book , inUserPage = false){
+  function createReviewCards(reviewsArray , inUserPage = false){
 
-    if(inUserPage){
       const reviewList = reviewsArray.map((review) => <ReviewCard key={`reviewKey${review.id}`} book={review.book} review={review} handleFormContainer={handleFormContainer} handleReviewChanges={handleReviewChanges} inUserPage={inUserPage}></ReviewCard>)
       return reviewList
-    }
-    else{
-      const reviewList = reviewsArray.map((review) => <ReviewCard key={`reviewKey${review.id}`} book={book} review={review} handleFormContainer={handleFormContainer} handleReviewChanges={handleReviewChanges}></ReviewCard>)
-    return reviewList
-    }
+    
 }
 
 function createBookCards(bookArr){
@@ -56,7 +51,7 @@ function createBookCards(bookArr){
   function handleReviewChanges(reviewValues , method){
     const reviewID = reviewValues.id
     const filteredReviews = reviews.filter((review) => review.id !== reviewID)
-    
+   
     switch (method){
 
         case 'post':
@@ -95,7 +90,7 @@ function createBookCards(bookArr){
           setReviews={setReviews} handleReviewChanges ={handleReviewChanges} handleFormContainer={handleFormContainer} createReviewCards={createReviewCards}/>} />
 
           <Route path="/profile"  element = {<ProfilePage reviews={reviews}
-          setReviews={setReviews} setUser={setUser} handleReviewChanges ={handleReviewChanges} handleFormContainer={handleFormContainer} portalSite={portalSite} createReviewCards={createReviewCards} />}/>
+          setReviews={setReviews} setUser={setUser} handleReviewChanges ={handleReviewChanges} handleFormContainer={handleFormContainer}  createReviewCards={createReviewCards} />}/>
 
         </Routes>
         
